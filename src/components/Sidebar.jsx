@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import pennywiselogo from "../assets/images/pennywiselogo.png";
 import { FiSidebar } from "react-icons/fi";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -7,14 +7,16 @@ import { IoCardOutline } from "react-icons/io5";
 import { GrAnalytics } from "react-icons/gr";
 import { IoSettingsOutline } from "react-icons/io5";
 import { HiOutlineLogout } from "react-icons/hi";
+import SidebarContext from "../context/SidebarContext/SidebarContext";
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(() => window.innerWidth >= 1024);
+
+  const {isOpen, setIsOpen} = useContext(SidebarContext)
 
   return (
     <>
       <div
-        className={`h-full py-5 transition-all duration-300 ease-in-out bg-white
+        className={`h-full py-4 transition-all duration-300 ease-in-out bg-white z-10
       ${isOpen ? "w-68 md:w-65" : "w-0"} flex flex-col`}
       >
         <div className="w-full flex justify-between pl-5 pr-4 ">
