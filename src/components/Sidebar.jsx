@@ -14,7 +14,7 @@ const Sidebar = () => {
   return (
     <>
       <div
-        className={`h-full py-5 transition-all duration-300 ease-in-out
+        className={`h-full py-5 transition-all duration-300 ease-in-out bg-white
       ${isOpen ? "w-68 md:w-65" : "w-0"} flex flex-col`}
       >
         <div className="w-full flex justify-between pl-5 pr-4 ">
