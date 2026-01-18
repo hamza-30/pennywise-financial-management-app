@@ -10,13 +10,13 @@ function Header() {
 
   return (
     <>
-        <div className={`h-16 flex items-center pr-5 justify-between transform-all duration-300 ease-in-out text-[#383f45]
+        <div className={`h-16 flex items-center pr-5 transition-all duration-300 ease-in-out text-[#383f45]
             ${isOpen ? "pl-5" : "pl-15"}`}>
-            <span className={`text-2xl font-bold`}>
+            <span className={`text-2xl font-bold hidden md:inline`}>
                 Dashboard
             </span>
 
-            <div className='flex items-center gap-x-2'>
+            <div className='flex items-center gap-x-2 ml-auto'>
                 <FaUserCircle className={`text-[1.8rem]`}/>
                 <span className='text-sm font-bold hidden md:inline'>Magnus Carlsen</span>
             </div>
