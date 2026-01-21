@@ -16,7 +16,14 @@ const Sidebar = () => {
   return (
     <>
       <div
-        className={`h-full py-4 transition-all duration-300 ease-in-out bg-white z-10
+        className={`fixed min-h-screen inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 z-40 md:hidden ${
+          isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
+        onClick={() => setIsOpen(false)}
+      />
+
+      <div
+        className={`h-screen fixed py-4 transition-all duration-300 ease-in-out bg-white z-50
       ${isOpen ? "w-68 md:w-65" : "w-0"} flex flex-col`}
       >
         <div className="w-full flex justify-between pl-5 pr-4 ">
