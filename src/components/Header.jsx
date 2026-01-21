@@ -10,7 +10,7 @@ function Header() {
 
   return (
     <>
-        <div className={`h-16 flex items-center pr-5 transition-all duration-300 ease-in-out text-[#383f45]
+        <div className={`min-h-16 flex items-center pr-5 transition-all duration-300 ease-in-out text-[#383f45]
             ${isOpen ? "pl-5" : "pl-15"}`}>
             <span className={`text-2xl font-bold hidden md:inline`}>
                 Dashboard
