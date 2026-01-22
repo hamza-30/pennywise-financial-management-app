@@ -1,0 +1,251 @@
+import React, { use, useState } from "react";
+import { CiSearch } from "react-icons/ci";
+import TransactionRow from "../components/TransactionRow";
+import TransactionCard from "../components/TransactionCard";
+
+function Transactions() {
+  const categories = [
+    "All",
+    "Food",
+    "Shopping",
+    "Transport",
+    "Bills",
+    "Entertainment",
+    "Health",
+    "Education",
+    "Travel",
+    "Personal",
+    "Software",
+    "Freelance",
+    "Salary",
+    "Other",
+  ];
+
+  const [dateFilter, setDateFilter] = useState("This month");
+  const [typeFilter, setTypeFilter] = useState("All");
+  const [categoryFilter, setCategoryFilter] = useState("All");
+
+  let dateStyle =
+    dateFilter !== "This month" ? "bg-[#c4f82a]" : "text-gray-700";
+  let typeStyle = typeFilter !== "All" ? "bg-[#c4f82a]" : "text-gray-700";
+  let categoryStyle =
+    categoryFilter !== "All" ? "text-black bg-[#c4f82a]" : "text-gray-700";
+
+  let transactions = [
+    {
+      desc: "Netflix Subscription",
+      type: "Expense",
+      category: "Entertainment",
+      date: "21 Jan, 26",
+      amount: "$321",
+    },
+    {
+      desc: "Monthly Salary",
+      type: "Income",
+      category: "Salary",
+      date: "20 Jan, 26",
+      amount: "$4,500",
+    },
+    {
+      desc: "Starbucks Coffee",
+      type: "Expense",
+      category: "Food",
+      date: "19 Jan, 26",
+      amount: "$6.50",
+    },
+    {
+      desc: "Amazon - Monitor",
+      type: "Expense",
+      category: "Shopping",
+      date: "18 Jan, 26",
+      amount: "$249",
+    },
+    {
+      desc: "Freelance Logo Design",
+      type: "Income",
+      category: "Freelance",
+      date: "17 Jan, 26",
+      amount: "$600",
+    },
+    {
+      desc: "Uber Ride",
+      type: "Expense",
+      category: "Transport",
+      date: "16 Jan, 26",
+      amount: "$18",
+    },
+    {
+      desc: "City Electricity Bill",
+      type: "Expense",
+      category: "Bills",
+      date: "15 Jan, 26",
+      amount: "$85",
+    },
+    {
+      desc: "Gym Membership",
+      type: "Expense",
+      category: "Health",
+      date: "14 Jan, 26",
+      amount: "$50",
+    },
+    {
+      desc: "Udemy React Course",
+      type: "Expense",
+      category: "Education",
+      date: "12 Jan, 26",
+      amount: "$12",
+    },
+    {
+      desc: "Flight to Paris",
+      type: "Expense",
+      category: "Travel",
+      date: "10 Jan, 26",
+      amount: "$850",
+    },
+    {
+      desc: "SaaS Subscription",
+      type: "Expense",
+      category: "Software",
+      date: "08 Jan, 26",
+      amount: "$29",
+    },
+    {
+      desc: "Birthday Gift",
+      type: "Expense",
+      category: "Personal",
+      date: "05 Jan, 26",
+      amount: "$100",
+    },
+  ];
+
+  return (
+    <>
+      <div
+        className={`flex flex-col gap-y-15 md:gap-y-4 pt-8 pb-5 px-4 lg:px-8 overflow-hidden`}
+      >
+        <div
+          className={`h-12 flex flex-col md:flex-row gap-y-4 items-start md:justify-between md:items-center text-[#383f45]`}
+        >
+          <span className="text-[1.5rem] font-bold text-2xl ">
+            Transactions
+          </span>
+
+          <div
+            className={`bg-[#c4f82a] hover:bg-[#b1e11e] flex items-center px-5 py-0.5 rounded-lg gap-x-2 transition-colors duration-150 ease-in-out cursor-pointer active:bg-[#b1e11e]`}
+          >
+            <span className="text-lg md:mb-1">+</span>
+            <span className="text-sm font-medium">Add Transaction</span>
+          </div>
+        </div>
+
+        <div
+          className={`w-full bg-white rounded-2xl shadow-[0_0px_20px_rgba(0,0,0,0.04)] px-3 md:px-6 py-6`}
+        >
+          <div className={`flex w-full gap-x-2 gap-y-2 flex-col md:flex-row `}>
+            <div
+              className={`min-h-11 flex-1 flex items-center border border-gray-200 rounded-lg text-gray-500 px-3 focus-within:border-[#c4f82a] focus-within:shadow-[0_0_9px_rgba(196,248,42,0.35)]`}
+            >
+              <CiSearch className="text-lg" />
+              <input
+                type="text"
+                name="search-transaction"
+                placeholder="Search transactions..."
+                className={`h-full w-full focus:outline-0 pl-3 pb-[0.16rem] text-gray-800`}
+              />
+            </div>
+
+            <div className={`flex gap-x-2`}>
+              <select
+                className={`h-8 md:h-11 max-w-22 rounded-lg text-gray-700 border border-gray-200 pl-2 hover:border-gray-400 text-sm focus:outline-[#c4f82a] ${dateStyle}`}
+                name="date"
+                value={dateFilter}
+                onChange={(e) => setDateFilter(e.target.value)}
+              >
+                <option className="bg-white" value="Today">
+                  Today
+                </option>
+                <option className="bg-white" value="This week">
+                  This week
+                </option>
+                <option className="bg-white" value="This month">
+                  This month
+                </option>
+                <option className="bg-white" value="Last month">
+                  Last month
+                </option>
+              </select>
+
+              <select
+                className={`h-8 md:h-11 min-w-22  rounded-lg text-gray-700 border border-gray-200 pl-2 hover:border-gray-400 text-sm focus:outline-[#c4f82a] ${typeStyle}`}
+                name="type"
+                value={typeFilter}
+                onChange={(e) => setTypeFilter(e.target.value)}
+              >
+                <option className="bg-white" value="All">
+                  All
+                </option>
+                <option className="bg-white" value="Income">
+                  Income
+                </option>
+                <option className="bg-white" value="Expense">
+                  Expense
+                </option>
+              </select>
+
+              <select
+                className={`h-8 md:h-11 max-w-22 rounded-lg text-gray-700 border border-gray-200 pl-2 hover:border-gray-400 text-sm focus:outline-[#c4f82a] ${categoryStyle}`}
+                name="category"
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+              >
+                {categories.map((cat) => (
+                  <option className="bg-white" key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <table className="w-full overflow-y-auto text-left border-collapse hidden md:table mt-8">
+            <thead
+              className={`text-[#777e86] text-xs font-extralight font-[Liberation Mono] border-b border-b-gray-300`}
+            >
+              <tr>
+                <th className="pl-3 pr-18 py-2 pb-3">DESCRIPTION</th>
+                <th className="px-3 py-2 pb-3">TYPE</th>
+                <th className="px-3 py-2 pb-3">CATEGORY</th>
+                <th className="px-3 py-2 pb-3">DATE</th>
+                <th className="px-3 py-2 pb-3 text-right">AMOUNT</th>
+                <th className="px-3 py-2 pb-3 text-right">ACTION</th>
+              </tr>
+            </thead>
+            <tbody>
+              {transactions.map((trans) => (
+                <TransactionRow
+                  desc={trans.desc}
+                  type={trans.type}
+                  category={trans.category}
+                  date={trans.date}
+                  amount={trans.amount}
+                />
+              ))}
+            </tbody>
+          </table>
+
+          {transactions.map((trans) => (
+            <TransactionCard
+              desc={trans.desc}
+              type={trans.type}
+              category={trans.category}
+              date={trans.date}
+              amount={trans.amount}
+            />
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default Transactions;
