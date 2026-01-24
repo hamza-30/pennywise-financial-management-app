@@ -2,6 +2,7 @@ import React, { use, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import TransactionRow from "../components/TransactionRow";
 import TransactionCard from "../components/TransactionCard";
+import AddTransaction from "../components/AddTransaction";
 
 function Transactions() {
   const categories = [
@@ -24,6 +25,7 @@ function Transactions() {
   const [dateFilter, setDateFilter] = useState("This month");
   const [typeFilter, setTypeFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
+  const [addTransactionOpen, setAddTransactionOpen] = useState(false)
 
   let dateStyle =
     dateFilter !== "This month" ? "bg-[#c4f82a]" : "text-gray-700";
@@ -39,87 +41,16 @@ function Transactions() {
       date: "21 Jan, 26",
       amount: "$321",
     },
-    {
-      desc: "Monthly Salary",
-      type: "Income",
-      category: "Salary",
-      date: "20 Jan, 26",
-      amount: "$4,500",
-    },
-    {
-      desc: "Starbucks Coffee",
-      type: "Expense",
-      category: "Food",
-      date: "19 Jan, 26",
-      amount: "$6.50",
-    },
-    {
-      desc: "Amazon - Monitor",
-      type: "Expense",
-      category: "Shopping",
-      date: "18 Jan, 26",
-      amount: "$249",
-    },
-    {
-      desc: "Freelance Logo Design",
-      type: "Income",
-      category: "Freelance",
-      date: "17 Jan, 26",
-      amount: "$600",
-    },
-    {
-      desc: "Uber Ride",
-      type: "Expense",
-      category: "Transport",
-      date: "16 Jan, 26",
-      amount: "$18",
-    },
-    {
-      desc: "City Electricity Bill",
-      type: "Expense",
-      category: "Bills",
-      date: "15 Jan, 26",
-      amount: "$85",
-    },
-    {
-      desc: "Gym Membership",
-      type: "Expense",
-      category: "Health",
-      date: "14 Jan, 26",
-      amount: "$50",
-    },
-    {
-      desc: "Udemy React Course",
-      type: "Expense",
-      category: "Education",
-      date: "12 Jan, 26",
-      amount: "$12",
-    },
-    {
-      desc: "Flight to Paris",
-      type: "Expense",
-      category: "Travel",
-      date: "10 Jan, 26",
-      amount: "$850",
-    },
-    {
-      desc: "SaaS Subscription",
-      type: "Expense",
-      category: "Software",
-      date: "08 Jan, 26",
-      amount: "$29",
-    },
-    {
-      desc: "Birthday Gift",
-      type: "Expense",
-      category: "Personal",
-      date: "05 Jan, 26",
-      amount: "$100",
-    },
   ];
 
   return (
-    <>
+    <> 
+      <div className={`inset-0
+        ${addTransactionOpen ? "fixed" : "hidden"}`}
+        onClick={() => setAddTransactionOpen(!addTransactionOpen)}  
+      ></div>
+      <AddTransaction addTransactionOpen={addTransactionOpen} setAddTransactionOpen={setAddTransactionOpen}/>
+
       <div
         className={`flex flex-col gap-y-15 md:gap-y-4 pt-8 pb-5 px-4 lg:px-8 overflow-hidden`}
       >
@@ -132,6 +63,7 @@ function Transactions() {
 
           <div
             className={`bg-[#c4f82a] hover:bg-[#b1e11e] flex items-center px-5 py-0.5 rounded-lg gap-x-2 transition-colors duration-150 ease-in-out cursor-pointer active:bg-[#b1e11e]`}
+            onClick={() => setAddTransactionOpen(!addTransactionOpen)}
           >
             <span className="text-lg md:mb-1">+</span>
             <span className="text-sm font-medium">Add Transaction</span>
