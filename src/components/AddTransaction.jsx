@@ -1,13 +1,18 @@
-import React, { use, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
+import  {nanoid} from "nanoid";
+import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
 
-function AddTransaction({addTransactionOpen, setAddTransactionOpen}) {
+
+function AddTransaction({addTransactionOpen, setAddTransactionOpen, editingTransaction, setEditingTransaction}) {
   const [activeTab, setActiveTab] = useState("Expense");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState(0);
   const [date, setDate] = useState("");
   const [category, setCategory] = useState("Other");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const {addTransaction, editTransaction} = useTransactions()
 
   const categoryList = [
     { name: "Salary", type: "Income" },
@@ -37,6 +42,59 @@ function AddTransaction({addTransactionOpen, setAddTransactionOpen}) {
     { name: "Other", type: "Expense" },
   ];
 
+  useEffect(() => {
+    if(editingTransaction){
+      setActiveTab(editingTransaction.type)
+      setDescription(editingTransaction.desc)
+      setAmount(editingTransaction.amount)
+      setDate(editingTransaction.date)
+      setCategory(editingTransaction.category)
+    } 
+    else{
+      setActiveTab("Expense")
+      setDescription("")
+      setAmount(0)
+      setDate("Apr 26, 2026")
+      setCategory("Other")
+    }
+}, [editingTransaction])
+
+  function submit(){
+    if(editingTransaction){
+      let updatedTransaction = { 
+        desc: description,
+        type: activeTab,
+        date: date,
+        category: category,
+        amount: amount,
+      
+      }
+      editTransaction(editingTransaction.id, updatedTransaction)
+      setEditingTransaction(null)
+    }
+    else{
+      let newTransaction = {
+        id: nanoid(),
+        desc: description,
+        type: activeTab,
+        date: date,
+        category: category,
+        amount: amount,
+      }
+
+      addTransaction(newTransaction)
+    }
+
+    setAddTransactionOpen(!addTransactionOpen)
+  }
+
+  function handleCancelClick(){
+    if(editingTransaction){
+      setEditingTransaction(null)
+    }
+    setAddTransactionOpen(!addTransactionOpen)
+  }
+
   return (
     <>
       <div
@@ -48,11 +106,11 @@ function AddTransaction({addTransactionOpen, setAddTransactionOpen}) {
           className={`flex justify-between  h-fit items-center pb-6 border-b border-gray-200`}
         >
           <span className={`text-[1.25rem] font-bold text-[#373c4a]`}>
-            New Transaction
+            {editingTransaction ? "Edit Transaction" : "New Transaction"}
           </span>
           <span
             className={`px-1 py-1 hover:bg-gray-100 active:bg-gray-100 rounded-lg group`}
-            onClick={() => setAddTransactionOpen(!addTransactionOpen)}
+            onClick={handleCancelClick}
           >
             <IoCloseOutline
               className={`text-2xl text-gray-400 group-hover:text-black group-active:text-black`}
@@ -93,6 +151,7 @@ function AddTransaction({addTransactionOpen, setAddTransactionOpen}) {
               placeholder="e.g. Grocery Shopping"
               className={`h-11 rounded-lg px-4 border border-gray-300 text-base focus:text-black focus:border-[#c4f82a] focus:shadow-[0_0_9px_rgba(196,248,42,0.35)] focus:outline-none`}
               onChange={(e) => setDescription(e.target.value)}
+              required
             />
           </div>
 
@@ -108,7 +167,8 @@ function AddTransaction({addTransactionOpen, setAddTransactionOpen}) {
                 value={amount}
                 placeholder="0.00"
                 className={`h-11 rounded-lg px-4 border border-gray-300 text-base focus:text-black focus:border-[#c4f82a] focus:shadow-[0_0_9px_rgba(196,248,42,0.35)] focus:outline-none`}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={(e) => setAmount(Number(e.target.value))}
+                required
               />
             </div>
 
@@ -118,9 +178,10 @@ function AddTransaction({addTransactionOpen, setAddTransactionOpen}) {
               <span className={`font-semibold`}>DATE</span>
               <input
                 type="date"
-                placeholder="0.00"
+                value={date}
                 className={`h-11 w-full rounded-lg px-4 border border-gray-300 text-base focus:text-black focus:border-[#c4f82a] focus:shadow-[0_0_9px_rgba(196,248,42,0.35)] focus:outline-none`}
                 onChange={(e) => setDate(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -144,7 +205,7 @@ function AddTransaction({addTransactionOpen, setAddTransactionOpen}) {
                         .filter((cat) => cat.type == "Expense")
                         .map((cat, index) => (
                           <li
-                            key={index}
+                            key={cat.name}
                             className={`py-2 px-4 hover:bg-gray-200 active:bg-gray-200 text-black`}
                             value={cat.name}
                             onClick={() => setCategory(cat.name)}
@@ -156,7 +217,7 @@ function AddTransaction({addTransactionOpen, setAddTransactionOpen}) {
                         .filter((cat) => cat.type == "Income")
                         .map((cat, index) => (
                           <li
-                            key={index}
+                            key={cat.name}
                             className={`py-2 px-4 hover:bg-gray-200 active:bg-gray-200 text-black`}
                             value={cat.name}
                             onClick={() => setCategory(cat.name)}
@@ -174,14 +235,15 @@ function AddTransaction({addTransactionOpen, setAddTransactionOpen}) {
           >
             <span
               className={`px-3 py-2 hover:bg-gray-100 active:bg-gray-100 rounded-lg cursor-pointer`}
-              onClick={() => setAddTransactionOpen(!addTransactionOpen)}
+              onClick={handleCancelClick}
             >
               Cancel
             </span>
             <span
               className={`px-3 py-2 rounded-lg bg-[#c5f828] hover:bg-[#b6e726] active:bg-[#b6e726] cursor-pointer`}
+              onClick={submit}
             >
-              Add Transaction
+              {editingTransaction ? "Update" : "Add Transaction"}
             </span>
           </div>
         </div>

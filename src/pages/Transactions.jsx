@@ -3,6 +3,7 @@ import { CiSearch } from "react-icons/ci";
 import TransactionRow from "../components/TransactionRow";
 import TransactionCard from "../components/TransactionCard";
 import AddTransaction from "../components/AddTransaction";
+import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
 
 function Transactions() {
   const categories = [
@@ -26,6 +27,7 @@ function Transactions() {
   const [typeFilter, setTypeFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [addTransactionOpen, setAddTransactionOpen] = useState(false)
+  const [editingTransaction, setEditingTransaction] = useState(null)
 
   let dateStyle =
     dateFilter !== "This month" ? "bg-[#c4f82a]" : "text-gray-700";
@@ -33,15 +35,7 @@ function Transactions() {
   let categoryStyle =
     categoryFilter !== "All" ? "text-black bg-[#c4f82a]" : "text-gray-700";
 
-  let transactions = [
-    {
-      desc: "Netflix Subscription",
-      type: "Expense",
-      category: "Entertainment",
-      date: "21 Jan, 26",
-      amount: "$321",
-    },
-  ];
+  let {transactions} = useTransactions()
 
   return (
     <> 
@@ -49,7 +43,7 @@ function Transactions() {
         ${addTransactionOpen ? "fixed" : "hidden"}`}
         onClick={() => setAddTransactionOpen(!addTransactionOpen)}  
       ></div>
-      <AddTransaction addTransactionOpen={addTransactionOpen} setAddTransactionOpen={setAddTransactionOpen}/>
+      <AddTransaction addTransactionOpen={addTransactionOpen} setAddTransactionOpen={setAddTransactionOpen} editingTransaction={editingTransaction} setEditingTransaction={setEditingTransaction}/>
 
       <div
         className={`flex flex-col gap-y-15 md:gap-y-4 pt-8 pb-5 px-4 lg:px-8 overflow-hidden`}
@@ -155,11 +149,16 @@ function Transactions() {
             <tbody>
               {transactions.map((trans) => (
                 <TransactionRow
+                  key={trans.id}
+                  id={trans.id}
                   desc={trans.desc}
                   type={trans.type}
                   category={trans.category}
                   date={trans.date}
                   amount={trans.amount}
+                  setEditingTransaction={setEditingTransaction}
+                  setAddTransactionOpen={setAddTransactionOpen}
+                  transaction={trans}
                 />
               ))}
             </tbody>
@@ -167,11 +166,16 @@ function Transactions() {
 
           {transactions.map((trans) => (
             <TransactionCard
+              key={trans.id}
+              id={trans.id}
               desc={trans.desc}
               type={trans.type}
               category={trans.category}
               date={trans.date}
               amount={trans.amount}
+              setEditingTransaction={setEditingTransaction}
+              setAddTransactionOpen={setAddTransactionOpen}
+              transaction={trans}
             />
           ))}
         </div>

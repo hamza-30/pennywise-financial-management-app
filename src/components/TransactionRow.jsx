@@ -1,8 +1,16 @@
 import React from "react";
 import { FiEdit2 } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
 
-function TransactionRow({ desc, type, category, date, amount }) {
+function TransactionRow({ id, desc, type, category, date, amount, setEditingTransaction, setAddTransactionOpen, transaction }) {
+  const { deleteTransaction } = useTransactions()
+
+  function handleClick(){
+    setEditingTransaction(transaction)
+    setAddTransactionOpen(true)
+  }
+  
   return (
     <>
       <tr className="hover:bg-gray-50 hidden md:table-row">
@@ -30,11 +38,13 @@ function TransactionRow({ desc, type, category, date, amount }) {
         <td className="px-3 py-4 text-right">
           <button
             className={`text-[#c4f82a] text-[1.1rem] bg-[#f2fdd3] inline-flex mr-3 px-1 py-1 rounded-md lg:text-gray-500 lg:bg-gray-100 hover:text-[#c4f82a] hover:bg-[#f3fcda]`}
+            onClick={handleClick}
           >
             <FiEdit2 />
           </button>
           <button
             className={`text-[#ab4f55] text-[1.1rem] bg-[#fee4e6] inline-flex px-1 py-1 rounded-md lg:text-gray-500 lg:bg-gray-100 hover:text-[#ab4f55] hover:bg-[#fee4e6]`}
+            onClick={() => deleteTransaction(id)}
           >
             <RiDeleteBinLine />
           </button>
