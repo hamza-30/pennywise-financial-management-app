@@ -3,6 +3,7 @@ import './App.css'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import Transactions from './pages/Transactions'
+import TransactionContextProvider from './context/TransactionContext/TransactionContextProvider'
 
 function App() {
 
@@ -14,7 +15,9 @@ function App() {
         <div className='flex flex-col flex-1 h-full overflow-y-auto'>
           <Header />
           <main>
-            <Transactions />
+            <TransactionContextProvider>
+              <Transactions />
+            </TransactionContextProvider>
           </main>
         </div>
       </div>
