@@ -83,6 +83,7 @@ function AddTransaction({addTransactionOpen, setAddTransactionOpen, editingTrans
       }
 
       addTransaction(newTransaction)
+      handleCancelClick()
     }
 
     setAddTransactionOpen(!addTransactionOpen)
@@ -92,6 +93,12 @@ function AddTransaction({addTransactionOpen, setAddTransactionOpen, editingTrans
     if(editingTransaction){
       setEditingTransaction(null)
     }
+
+    setActiveTab("Expense")
+    setDescription("")
+    setAmount(0)
+    setDate("Apr 26, 2026")
+    setCategory("Other")
     setAddTransactionOpen(!addTransactionOpen)
   }
 
