@@ -33,9 +33,9 @@ function TransactionRow({ id, desc, type, category, date, amount, setEditingTran
         <td className="px-3 py-4 text-[#777e86]">{category}</td>
         <td className="px-3 py-4 text-[#777e86]">{date}</td>
         <td className="px-3 py-4 text-right text-[1.06rem] font-semibold">
-          {type == "Income" ? `+${amount}` : `-${amount}`}
+          {type == "Income" ? `+$${amount}` : `-$${amount}`}
         </td>
-        <td className="px-3 py-4 text-right">
+        <td className="px-3 py-4 min-w-22 text-right">
           <button
             className={`text-[#c4f82a] text-[1.1rem] bg-[#f2fdd3] inline-flex mr-3 px-1 py-1 rounded-md lg:text-gray-500 lg:bg-gray-100 hover:text-[#c4f82a] hover:bg-[#f3fcda]`}
             onClick={handleClick}

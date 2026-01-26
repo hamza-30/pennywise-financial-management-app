@@ -19,19 +19,19 @@ function TransactionCard({ id, desc, type, date, category, amount, editingTransa
         className={`flex justify-between border-b border-gray-100 pb-4 mb-5`}
       >
         <div className={`flex flex-col `}>
-          <span className={`text-[1.05rem] font-semibold text-[#111e43]`}>
-            {desc}
+          <span className={`text-[1.05rem] font-semibold text-[#111e43] pr-4`}>
+            {desc}  
           </span>
           <span className={`text-xs text-gray-500`}>{date}</span>
         </div>
 
         {type == "Income" ? (
           <div className={`font-semibold text-[1.04rem] text-[#33a887]`}>
-            +{amount}
+            +${amount}
           </div>
         ) : (
           <div className={`font-semibold text-[1.04rem] text-[#111e43]`}>
-            -{amount}
+            -${amount}
           </div>
         )}
       </div>
