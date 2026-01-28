@@ -7,16 +7,46 @@ import { useTransactions } from "../context/TransactionContext/TransactionContex
 import { checkDate } from "../utils/dateUtils";
 
 function Transactions() {
-  const categories = [
-    "All",
-    "Salary", "Freelance", "Investments", "Rental Income", "Gifts", "Refunds", "Crypto", "Housing", "Utilities", "Food & Dining", "Groceries", "Transport", "Shopping", "Health", "Insurance", "Entertainment", "Travel", "Education", "Software/Subs", "Personal Care", "Debt/Loans", "Gifts & Charity", "Taxes", "Other"
-  ];
-
   const [dateFilter, setDateFilter] = useState("This month");
   const [typeFilter, setTypeFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
-  const [addTransactionOpen, setAddTransactionOpen] = useState(false)
-  const [editingTransaction, setEditingTransaction] = useState(null)
+  const [addTransactionOpen, setAddTransactionOpen] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState(null);
+
+  let categories = [
+    { name: "All"}, 
+    { name: "Salary", type: "Income" },
+    { name: "Freelance", type: "Income" },
+    { name: "Investments", type: "Income" },
+    { name: "Rental Income", type: "Income" },
+    { name: "Gifts", type: "Income" },
+    { name: "Refunds", type: "Income" },
+    { name: "Crypto", type: "Income" },
+    { name: "Housing", type: "Expense" },
+    { name: "Utilities", type: "Expense" },
+    { name: "Food & Dining", type: "Expense" },
+    { name: "Groceries", type: "Expense" },
+    { name: "Transport", type: "Expense" },
+    { name: "Shopping", type: "Expense" },
+    { name: "Health", type: "Expense" },
+    { name: "Insurance", type: "Expense" },
+    { name: "Entertainment", type: "Expense" },
+    { name: "Travel", type: "Expense" },
+    { name: "Education", type: "Expense" },
+    { name: "Software/Subs", type: "Expense" },
+    { name: "Personal Care", type: "Expense" },
+    { name: "Debt/Loans", type: "Expense" },
+    { name: "Gifts & Charity", type: "Expense" },
+    { name: "Taxes", type: "Expense" },
+    { name: "Other", type: "Expense" },
+  ];
+
+  if(typeFilter == "Income"){
+    categories = [{ name: "All"} , ...categories.filter((item) => item.type == "Income")]
+  }
+  else if(typeFilter == "Expense"){
+    categories = [{ name: "All"} , ...categories.filter((item) => item.type == "Expense")]
+  }
 
   let dateStyle =
     dateFilter !== "This month" ? "bg-[#c4f82a]" : "text-gray-700";
@@ -24,30 +54,37 @@ function Transactions() {
   let categoryStyle =
     categoryFilter !== "All" ? "text-black bg-[#c4f82a]" : "text-gray-700";
 
-  let {transactions} = useTransactions()
+  let { transactions } = useTransactions();
 
   let filteredTransactions = transactions.filter((trans) => {
-    let matchesType = trans.type == typeFilter || typeFilter == "All"
-    let matchesCategory = trans.category == categoryFilter || categoryFilter == "All"
+    let matchesType = trans.type == typeFilter || typeFilter == "All";
+    let matchesCategory =
+      trans.category == categoryFilter || categoryFilter == "All";
     const matchesDate = checkDate(trans.date, dateFilter);
 
-    return matchesType && matchesCategory && matchesDate
-  })
+    return matchesType && matchesCategory && matchesDate;
+  });
 
-  filteredTransactions.sort((a,b) => {
-    let dateA = new Date(a.date).getTime()
-    let dateB = new Date(b.date).getTime()
+  filteredTransactions.sort((a, b) => {
+    let dateA = new Date(a.date).getTime();
+    let dateB = new Date(b.date).getTime();
 
-    return dateB - dateA
-  })
+    return dateB - dateA;
+  });
 
   return (
-    <> 
-      <div className={`inset-0
+    <>
+      <div
+        className={`inset-0
         ${addTransactionOpen ? "fixed" : "hidden"}`}
-        onClick={() => setAddTransactionOpen(!addTransactionOpen)}  
+        onClick={() => setAddTransactionOpen(!addTransactionOpen)}
       ></div>
-      <AddTransaction addTransactionOpen={addTransactionOpen} setAddTransactionOpen={setAddTransactionOpen} editingTransaction={editingTransaction} setEditingTransaction={setEditingTransaction}/>
+      <AddTransaction
+        addTransactionOpen={addTransactionOpen}
+        setAddTransactionOpen={setAddTransactionOpen}
+        editingTransaction={editingTransaction}
+        setEditingTransaction={setEditingTransaction}
+      />
 
       <div
         className={`flex flex-col gap-y-15 md:gap-y-4 pt-8 pb-5 px-4 lg:px-8 overflow-hidden`}
@@ -129,8 +166,8 @@ function Transactions() {
                 onChange={(e) => setCategoryFilter(e.target.value)}
               >
                 {categories.map((cat) => (
-                  <option className="bg-white" key={cat} value={cat}>
-                    {cat}
+                  <option className="bg-white" key={cat.name} value={cat.name}>
+                    {cat.name}
                   </option>
                 ))}
               </select>
