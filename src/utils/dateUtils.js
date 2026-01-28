@@ -8,7 +8,7 @@ export function formatDateForInput(dateString) {
   return `${year}-${month}-${day}`;
 }
 
-export function formatDate(dateString){
+export function formatDateForUI(dateString){
   return new Date(dateString).toLocaleDateString("en-US", {
     month: "short",
     day: "2-digit",
