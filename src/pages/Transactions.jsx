@@ -34,6 +34,13 @@ function Transactions() {
     return matchesType && matchesCategory && matchesDate
   })
 
+  filteredTransactions.sort((a,b) => {
+    let dateA = new Date(a.date).getTime()
+    let dateB = new Date(b.date).getTime()
+
+    return dateB - dateA
+  })
+
   return (
     <> 
       <div className={`inset-0
