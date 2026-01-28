@@ -4,23 +4,12 @@ import TransactionRow from "../components/TransactionRow";
 import TransactionCard from "../components/TransactionCard";
 import AddTransaction from "../components/AddTransaction";
 import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
+import { checkDate } from "../utils/dateUtils";
 
 function Transactions() {
   const categories = [
     "All",
-    "Food",
-    "Shopping",
-    "Transport",
-    "Bills",
-    "Entertainment",
-    "Health",
-    "Education",
-    "Travel",
-    "Personal",
-    "Software",
-    "Freelance",
-    "Salary",
-    "Other",
+    "Salary", "Freelance", "Investments", "Rental Income", "Gifts", "Refunds", "Crypto", "Housing", "Utilities", "Food & Dining", "Groceries", "Transport", "Shopping", "Health", "Insurance", "Entertainment", "Travel", "Education", "Software/Subs", "Personal Care", "Debt/Loans", "Gifts & Charity", "Taxes", "Other"
   ];
 
   const [dateFilter, setDateFilter] = useState("This month");
@@ -36,6 +25,14 @@ function Transactions() {
     categoryFilter !== "All" ? "text-black bg-[#c4f82a]" : "text-gray-700";
 
   let {transactions} = useTransactions()
+
+  let filteredTransactions = transactions.filter((trans) => {
+    let matchesType = trans.type == typeFilter || typeFilter == "All"
+    let matchesCategory = trans.category == categoryFilter || categoryFilter == "All"
+    const matchesDate = checkDate(trans.date, dateFilter);
+
+    return matchesType && matchesCategory && matchesDate
+  })
 
   return (
     <> 
@@ -147,7 +144,7 @@ function Transactions() {
               </tr>
             </thead>
             <tbody>
-              {transactions.map((trans) => (
+              {filteredTransactions.map((trans) => (
                 <TransactionRow
                   key={trans.id}
                   id={trans.id}
@@ -164,7 +161,7 @@ function Transactions() {
             </tbody>
           </table>
 
-          {transactions.map((trans) => (
+          {filteredTransactions.map((trans) => (
             <TransactionCard
               key={trans.id}
               id={trans.id}
