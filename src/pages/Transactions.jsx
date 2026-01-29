@@ -1,5 +1,6 @@
 import React, { use, useState } from "react";
 import { CiSearch } from "react-icons/ci";
+import { IoReceiptSharp } from "react-icons/io5";
 import TransactionRow from "../components/TransactionRow";
 import TransactionCard from "../components/TransactionCard";
 import AddTransaction from "../components/AddTransaction";
@@ -87,7 +88,7 @@ function Transactions() {
       />
 
       <div
-        className={`flex flex-col gap-y-15 md:gap-y-4 pt-8 pb-5 px-4 lg:px-8 overflow-hidden`}
+        className={`flex flex-col h-full gap-y-15 md:gap-y-4 pt-8 pb-5 px-4 lg:px-8 overflow-hidden`}
       >
         <div
           className={`h-12 flex flex-col md:flex-row gap-y-4 items-start md:justify-between md:items-center text-[#383f45]`}
@@ -106,9 +107,9 @@ function Transactions() {
         </div>
 
         <div
-          className={`w-full bg-white rounded-2xl shadow-[0_0px_20px_rgba(0,0,0,0.04)] px-3 md:px-6 py-6`}
+          className={`flex flex-col flex-1 bg-white rounded-2xl shadow-[0_0px_20px_rgba(0,0,0,0.04)] px-3 md:px-6 py-6`}
         >
-          <div className={`flex w-full gap-x-2 gap-y-2 flex-col md:flex-row `}>
+          <div className={`flex w-full gap-x-2 gap-y-2 flex-col md:flex-row`}>
             <div
               className={`min-h-11 flex-1 flex items-center border border-gray-200 rounded-lg text-gray-500 px-3 focus-within:border-[#c4f82a] focus-within:shadow-[0_0_9px_rgba(196,248,42,0.35)]`}
             >
@@ -187,7 +188,7 @@ function Transactions() {
                 <th className="px-3 py-2 pb-3 text-right">ACTION</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody >
               {filteredTransactions.map((trans) => (
                 <TransactionRow
                   key={trans.id}
@@ -205,21 +206,29 @@ function Transactions() {
             </tbody>
           </table>
 
-          {filteredTransactions.map((trans) => (
-            <TransactionCard
-              key={trans.id}
-              id={trans.id}
-              desc={trans.desc}
-              type={trans.type}
-              category={trans.category}
-              date={trans.date}
-              amount={trans.amount}
-              setEditingTransaction={setEditingTransaction}
-              setAddTransactionOpen={setAddTransactionOpen}
-              transaction={trans}
-            />
-          ))}
-        </div>
+          <div className={``}>
+            {filteredTransactions.map((trans) => (
+              <TransactionCard
+                key={trans.id}
+                id={trans.id}
+                desc={trans.desc}
+                type={trans.type}
+                category={trans.category}
+                date={trans.date}
+                amount={trans.amount}
+                setEditingTransaction={setEditingTransaction}
+                setAddTransactionOpen={setAddTransactionOpen}
+                transaction={trans}
+              />
+            ))}
+          </div>
+
+          <div className={`flex-1 w-full flex flex-col items-center justify-center gap-y-2
+            ${transactions.length == 0 ? "flex" : "hidden"}`}>
+            <IoReceiptSharp className={`text-3xl md:text-5xl text-[#a0c435]`}/>
+            <p className={`font-semibold text-xl md:text-2xl text-[#484848]`}>No transactions yet</p>
+          </div>
+        </div> 
       </div>
     </>
   );

@@ -12,9 +12,9 @@ function App() {
       <div className='w-full h-screen flex overflow-hidden'>
         <Sidebar />
 
-        <div className='flex flex-col flex-1 h-full overflow-y-auto'>
+        <div className='flex flex-col flex-1  overflow-y-auto'>
           <Header />
-          <main>
+          <main className={`flex-1`}>
             <TransactionContextProvider>
               <Transactions />
             </TransactionContextProvider>
