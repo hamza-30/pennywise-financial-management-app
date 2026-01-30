@@ -13,6 +13,7 @@ function Transactions() {
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [addTransactionOpen, setAddTransactionOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
+  const [searchTransaction, setSearchTransaction] = useState("")
 
   let categories = [
     { name: "All"}, 
@@ -64,7 +65,10 @@ function Transactions() {
     const matchesDate = checkDate(trans.date, dateFilter);
 
     return matchesType && matchesCategory && matchesDate;
-  });
+  }).filter((trans) => {
+    let desc = trans.desc.toLowerCase()
+    return desc.includes(searchTransaction.toLowerCase())
+  })
 
   filteredTransactions.sort((a, b) => {
     let dateA = new Date(a.date).getTime();
@@ -116,9 +120,11 @@ function Transactions() {
               <CiSearch className="text-lg" />
               <input
                 type="text"
+                value={searchTransaction}
                 name="search-transaction"
                 placeholder="Search transactions..."
                 className={`h-full w-full focus:outline-0 pl-3 pb-[0.16rem] text-gray-800`}
+                onChange={(e) => setSearchTransaction(e.target.value)}
               />
             </div>
 
