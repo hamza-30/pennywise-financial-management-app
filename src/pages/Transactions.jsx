@@ -234,6 +234,13 @@ function Transactions() {
             <IoReceiptSharp className={`text-3xl md:text-5xl text-[#a0c435]`}/>
             <p className={`font-semibold text-xl md:text-2xl text-[#484848]`}>No transactions yet</p>
           </div>
+
+          <div className={`flex-1 w-full flex flex-col items-center justify-center gap-y-2
+            ${filteredTransactions.length == 0 ? "flex" : "hidden"}`}>
+            <IoReceiptSharp className={`text-3xl md:text-5xl text-[#a0c435]`}/>
+            <p className={`font-semibold text-xl md:text-2xl text-[#484848]`}>No transactions found</p>
+            <p className={`text-[#595959] text-sm`}>Try refining your search or adjust filters.</p>
+          </div>
         </div> 
       </div>
     </>
