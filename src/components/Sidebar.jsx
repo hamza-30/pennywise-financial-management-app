@@ -23,7 +23,7 @@ const Sidebar = () => {
       />
 
       <div
-        className={`h-screen fixed py-4 transition-all duration-300 ease-in-out bg-white z-50
+        className={`h-screen fixed lg:static py-4 transition-all duration-300 ease-in-out bg-white z-50
       ${isOpen ? "w-68 md:w-65" : "w-0"} flex flex-col`}
       >
         <div className="w-full flex justify-between pl-5 pr-4 ">

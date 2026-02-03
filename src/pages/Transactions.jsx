@@ -159,7 +159,7 @@ function Transactions() {
         </div>
 
         <div
-          className={`flex flex-col flex-1 bg-white rounded-2xl shadow-[0_0px_20px_rgba(0,0,0,0.04)] px-3 md:px-6 py-6`}
+          className={`flex flex-col flex-1 overflow-hidden bg-white rounded-2xl shadow-[0_0px_20px_rgba(0,0,0,0.04)] px-3 md:px-6 py-6`}
         >
           <div className={`flex w-full gap-x-2 gap-y-2 flex-col md:flex-row`}>
             <div
