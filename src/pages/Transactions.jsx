@@ -12,8 +12,12 @@ function Transactions() {
   const [typeFilter, setTypeFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [addTransactionOpen, setAddTransactionOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [deletingTransaction, setDeletingTransaction] = useState(null)
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [searchTransaction, setSearchTransaction] = useState("")
+
+  const {deleteTransaction} = useTransactions()
 
   let categories = [
     { name: "All"}, 
@@ -77,6 +81,24 @@ function Transactions() {
     return dateB - dateA;
   });
 
+  function onDeleteClick(id){
+    setDeleteModalOpen(true)
+    setDeletingTransaction(id)
+  }
+
+  function onDeleteModalCancelClick(){
+    setDeletingTransaction(null)
+    setDeleteModalOpen(!deleteModalOpen)
+  }
+
+  function confirmTransactionDeletion(){
+    if(deletingTransaction){
+      deleteTransaction(deletingTransaction)
+      setDeletingTransaction(null)
+      setDeleteModalOpen(!deleteModalOpen)
+    }
+  }
+
   return (
     <>
       <div
@@ -90,6 +112,34 @@ function Transactions() {
         editingTransaction={editingTransaction}
         setEditingTransaction={setEditingTransaction}
       />
+
+      <div className={`inset-0 fixed
+        ${deleteModalOpen ? "fixed": "hidden"}`}></div>
+      <div
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+                w-[90vw] md:w-[60vw] lg:w-120 pt-4 pb-3 px-4 md:px-6 backdrop-blur-xl flex flex-col bg-white rounded-2xl border border-gray-600 transition-all duration-300 ease-in-out z-50 gap-y-5
+                ${deleteModalOpen ? "absolute" : "hidden"}
+                `}
+      >
+        <p className={`font-medium`}>Are you sure you want to delete this transaction?</p>
+
+        <div className={`ml-auto`}>
+          <button
+            className={`px-3 py-1.5 text-sm mr-3 hover:bg-gray-100 active:bg-gray-100 rounded-lg cursor-pointer`}
+            onClick={onDeleteModalCancelClick}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className={`px-3 py-1.5 text-sm w-fit text-white rounded-lg bg-[#ef4444] hover:bg-[#dc2626] active:bg-[#dc2626] cursor-pointer`}
+            onClick={confirmTransactionDeletion}
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+
 
       <div
         className={`flex flex-col h-full gap-y-15 md:gap-y-4 pt-8 pb-5 px-4 lg:px-8 overflow-hidden`}
@@ -207,6 +257,7 @@ function Transactions() {
                   setEditingTransaction={setEditingTransaction}
                   setAddTransactionOpen={setAddTransactionOpen}
                   transaction={trans}
+                  onDeleteClick={onDeleteClick}
                 />
               ))}
             </tbody>
@@ -225,6 +276,7 @@ function Transactions() {
                 setEditingTransaction={setEditingTransaction}
                 setAddTransactionOpen={setAddTransactionOpen}
                 transaction={trans}
+                onDeleteClick={onDeleteClick}
               />
             ))}
           </div>

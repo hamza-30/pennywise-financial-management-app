@@ -3,8 +3,7 @@ import { FiEdit2 } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
 
-function TransactionCard({ id, desc, type, date, category, amount, editingTransaction, setEditingTransaction, setAddTransactionOpen, transaction}) {
-  let {deleteTransaction} = useTransactions()
+function TransactionCard({ id, desc, type, date, category, amount, editingTransaction, setEditingTransaction, setAddTransactionOpen, transaction, onDeleteClick}) {
 
   function handleClick(){
     setEditingTransaction(transaction)
@@ -51,7 +50,7 @@ function TransactionCard({ id, desc, type, date, category, amount, editingTransa
           </button>
           <button
             className={`text-[#ab4f55] text-[1.1rem] bg-[#fee4e6] active:bg-[#ffcdd1] inline-flex px-1.5 py-1.5 rounded-md`}
-            onClick={() => deleteTransaction(id)}
+            onClick={() => onDeleteClick(id)}
           >
             <RiDeleteBinLine />
           </button>
