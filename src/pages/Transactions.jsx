@@ -17,7 +17,7 @@ function Transactions() {
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [searchTransaction, setSearchTransaction] = useState("")
 
-  const {deleteTransaction} = useTransactions()
+  const {transactions, deleteTransaction} = useTransactions()
 
   let categories = [
     { name: "All"}, 
@@ -59,8 +59,6 @@ function Transactions() {
   let typeStyle = typeFilter !== "All" ? "bg-[#c4f82a]" : "text-gray-700";
   let categoryStyle =
     categoryFilter !== "All" ? "text-black bg-[#c4f82a]" : "text-gray-700";
-
-  let { transactions } = useTransactions();
 
   let filteredTransactions = transactions.filter((trans) => {
     let matchesType = trans.type == typeFilter || typeFilter == "All";
