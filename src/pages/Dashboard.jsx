@@ -2,18 +2,20 @@ import React from "react";
 import DashboardStatsCard from "../components/DashboardStatsCard";
 import { FiArrowRight } from "react-icons/fi";
 import RecentTransactionCard from "../components/RecentTransactionCard";
-import {useTransactions} from "../context/TransactionContext/TransactionContextProvider"
+import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
+import WorkingCapitalChart from "../components/WorkingCapitalChart";
 
 function Dashboard() {
-  const {transactions} = useTransactions()
+  const { transactions } = useTransactions();
 
-  const filteredTransactions = transactions.sort((a,b) => {
-    let dateA = new Date(a.date).getTime()
-    let dateB = new Date(b.date).getTime()
+  const filteredTransactions = transactions
+    .sort((a, b) => {
+      let dateA = new Date(a.date).getTime();
+      let dateB = new Date(b.date).getTime();
 
-    return dateB - dateA
-  })
-  .slice(0, 5)
+      return dateB - dateA;
+    })
+    .slice(0, 5);
 
   return (
     <div
@@ -27,9 +29,15 @@ function Dashboard() {
         <DashboardStatsCard description={"Total income"} amount={"240"} />
       </div>
 
-      <div className={`h-96 w-full bg-[#c8f083] rounded-xl`}></div>
+      <div
+        className={`h-96 w-full flex flex-col pt-5 pb-2 px-4 md:px-6 bg-white rounded-xl`}
+      >
+        <WorkingCapitalChart />
+      </div>
 
-      <div className={`rounded-xl h-fit bg-white py-5 px-4 md:px-6 shadow-[0_0px_8px_rgba(0,0,0,0.04)`}>
+      <div
+        className={`rounded-xl h-fit bg-white py-5 px-4 md:px-6 shadow-[0_0px_8px_rgba(0,0,0,0.04)`}
+      >
         <div className={`flex justify-between mb-6`}>
           <span className={`text-[1.2rem] text-[#111e43] font-semibold`}>
             Recent Transactions
@@ -42,14 +50,15 @@ function Dashboard() {
         </div>
 
         <div className={`flex flex-col gap-y-4`}>
-          {filteredTransactions.map((trans) => (<RecentTransactionCard
-          key={trans.id} 
-          desc={trans.desc}
-          type={trans.type}
-          amount={trans.amount}
-          date={trans.date}
-          category={trans.category}
-          />
+          {filteredTransactions.map((trans) => (
+            <RecentTransactionCard
+              key={trans.id}
+              desc={trans.desc}
+              type={trans.type}
+              amount={trans.amount}
+              date={trans.date}
+              category={trans.category}
+            />
           ))}
         </div>
       </div>
