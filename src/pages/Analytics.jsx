@@ -4,6 +4,8 @@ import { FiArrowDownRight } from "react-icons/fi";
 import { LuArrowUpRight } from "react-icons/lu";
 import { IoIosTrendingUp } from "react-icons/io";
 import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
+import SpendingTrendChart from "../components/SpendingTrendChart";
+import SpendingCategoryChart from "../components/SpendingCategoryChart";
 
 function filterByDate(transaction, dateFilter) {
   let transactionDate = new Date(transaction.date);
@@ -99,27 +101,40 @@ function filterByPreviousDate(transaction, dateFilter) {
 
 const getDaysForComparison = (filter) => {
   const today = new Date();
-  
+
   switch (filter) {
-    case 'Last 7 Days':
+    case "Last 7 Days":
       return { current: 7, previous: 7 };
 
-    case 'This Month':
-      const currentDays = today.getDate(); 
-  
-      const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+    case "This Month":
+      const currentDays = today.getDate();
+
+      const lastMonth = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        0,
+      ).getDate();
       return { current: currentDays, previous: lastMonth };
 
-    case 'Last Month':
-      const selectedMonth = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+    case "Last Month":
+      const selectedMonth = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        0,
+      ).getDate();
 
-      const twoMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 1, 0).getDate();
+      const twoMonthsAgo = new Date(
+        today.getFullYear(),
+        today.getMonth() - 1,
+        0,
+      ).getDate();
       return { current: selectedMonth, previous: twoMonthsAgo };
 
-    case 'This Year':
+    case "This Year":
       const startOfYear = new Date(today.getFullYear(), 0, 1);
-      const daysSoFar = Math.floor((today - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
-     
+      const daysSoFar =
+        Math.floor((today - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
+
       return { current: daysSoFar, previous: 365 };
 
     default:
@@ -127,13 +142,13 @@ const getDaysForComparison = (filter) => {
   }
 };
 
-function calculateChangePercentage(current, previous){
-  if(previous === 0){
-    return current > 0 ? 100 : 0
+function calculateChangePercentage(current, previous) {
+  if (previous === 0) {
+    return current > 0 ? 100 : 0;
   }
 
-  let change = ((current - previous) / previous) * 100
-  return Math.round(change)
+  let change = ((current - previous) / previous) * 100;
+  return Math.round(change);
 }
 
 function Analytics() {
@@ -159,21 +174,31 @@ function Analytics() {
       filterByPreviousDate(trans, dateFilter),
     );
 
-    let totalSpending = Number(dateFilteredTransactions
-      .filter((trans) => trans.type == "Expense")
-      .reduce((acc, trans) => acc + trans.amount, 0).toFixed(2))
+    let totalSpending = Number(
+      dateFilteredTransactions
+        .filter((trans) => trans.type == "Expense")
+        .reduce((acc, trans) => acc + trans.amount, 0)
+        .toFixed(2),
+    );
     let previousTotalSpending = previousDateFilteredTransactions
       .filter((trans) => trans.type == "Expense")
       .reduce((acc, trans) => acc + trans.amount, 0);
 
-    let totalSpendingPercentage = calculateChangePercentage(totalSpending, previousTotalSpending)
+    let totalSpendingPercentage = calculateChangePercentage(
+      totalSpending,
+      previousTotalSpending,
+    );
 
-    let {current: currentDays, previous: previousDays} = getDaysForComparison(dateFilter)
-   
-    let avgDaily = Number((totalSpending / currentDays).toFixed(2))
-    let previousAvgDaily = previousTotalSpending / previousDays
+    let { current: currentDays, previous: previousDays } =
+      getDaysForComparison(dateFilter);
 
-    let avgDailyPercentage = calculateChangePercentage(avgDaily, previousAvgDaily)
+    let avgDaily = Number((totalSpending / currentDays).toFixed(2));
+    let previousAvgDaily = previousTotalSpending / previousDays;
+
+    let avgDailyPercentage = calculateChangePercentage(
+      avgDaily,
+      previousAvgDaily,
+    );
 
     let expenseTransactions = dateFilteredTransactions.filter(
       (trans) => trans.type == "Expense",
@@ -200,6 +225,30 @@ function Analytics() {
           : 0;
     }
 
+    const spendingTrendChartData = Object.values(
+      expenseTransactions.reduce((acc, trans) => {
+        if (!acc.hasOwnProperty(trans.date)) {
+          acc[trans.date] = { fullDate: trans.date, expense: 0 };
+        }
+        acc[trans.date].expense = Number(
+          (acc[trans.date].expense + trans.amount).toFixed(2),
+        );
+
+        return acc;
+      }, {}),
+    ).sort((a, b) => {
+      let dateA = new Date(a.fullDate);
+      let dateB = new Date(b.fullDate);
+
+      return dateA - dateB;
+    });
+
+    const spendingCategoryChartData = Object.entries(categoryObj).map(
+      ([categ, val]) => {
+        return { category: categ, amount: val };
+      },
+    );
+
     return {
       totalSpending,
       totalSpendingPercentage,
@@ -207,6 +256,8 @@ function Analytics() {
       avgDailyPercentage,
       highestCategory,
       highestCategoryPercentage,
+      spendingTrendChartData,
+      spendingCategoryChartData,
     };
   }, [transactions, dateFilter]);
 
@@ -217,6 +268,8 @@ function Analytics() {
     avgDailyPercentage,
     highestCategory,
     highestCategoryPercentage,
+    spendingTrendChartData,
+    spendingCategoryChartData,
   } = analyticsData;
 
   return (
@@ -353,6 +406,14 @@ function Analytics() {
           </div>
         </div>
 
+        <div
+          className={`w-full flex flex-col md:flex-row gap-x-6 gap-y-6`}
+        >
+          <SpendingTrendChart spendingTrendChartData={spendingTrendChartData} />
+          <SpendingCategoryChart
+            spendingCategoryChartData={spendingCategoryChartData}
+          />
+        </div>
       </div>
     </>
   );
