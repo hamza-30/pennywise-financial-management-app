@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DashboardStatsCard from "../components/DashboardStatsCard";
 import { FiArrowRight } from "react-icons/fi";
 import RecentTransactionCard from "../components/RecentTransactionCard";
@@ -7,6 +7,21 @@ import WorkingCapitalChart from "../components/WorkingCapitalChart";
 
 function Dashboard() {
   const { transactions } = useTransactions();
+  const [initialBalance, setInitialBalance] = useState(0)
+
+  const income = Number( (transactions.filter((trans) => trans.type == "Income").filter((trans) => {
+    let transDate = new Date(trans.date)
+    let today = new Date()
+
+    return transDate.getMonth() == today.getMonth()
+  }).reduce((acc, trans) => acc + trans.amount, 0)).toFixed(2) )
+
+  const expense = Number( (transactions.filter((trans) => trans.type == "Expense").filter((trans) => {
+    let transDate = new Date(trans.date)
+    let today = new Date()
+
+    return transDate.getMonth() == today.getMonth()
+  }).reduce((acc, trans) => acc + trans.amount, 0)).toFixed(2) )
 
   const filteredTransactions = transactions
     .sort((a, b) => {
@@ -24,9 +39,9 @@ function Dashboard() {
       <div
         className={`flex flex-col h-fit md:flex-row justify-between gap-x-7 gap-y-5`}
       >
-        <DashboardStatsCard description={"Total balance"} amount={"5432"} />
-        <DashboardStatsCard description={"Total spending"} amount={"550"} />
-        <DashboardStatsCard description={"Total income"} amount={"240"} />
+        <DashboardStatsCard description={"Total balance"} amount={initialBalance + income - expense} />
+        <DashboardStatsCard description={"Total spending"} amount={expense} />
+        <DashboardStatsCard description={"Total income"} amount={income} />
       </div>
 
       <div
