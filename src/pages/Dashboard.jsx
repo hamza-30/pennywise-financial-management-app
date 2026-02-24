@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DashboardStatsCard from "../components/DashboardStatsCard";
 import { FiArrowRight } from "react-icons/fi";
+import { IoReceiptSharp } from "react-icons/io5";
 import RecentTransactionCard from "../components/RecentTransactionCard";
 import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
 import WorkingCapitalChart from "../components/WorkingCapitalChart";
@@ -65,6 +66,14 @@ function Dashboard() {
         </div>
 
         <div className={`flex flex-col gap-y-4`}>
+
+          {filteredTransactions.length == 0 && (
+            <div className={`w-full h-50 flex flex-col items-center justify-center gap-y-2`}>
+            <IoReceiptSharp className={`text-4xl text-[#a0c435]`}/>
+            <p className={`font-semibold text-xl text-gray-400`}>No transactions yet</p>
+          </div>
+          )}
+
           {filteredTransactions.map((trans) => (
             <RecentTransactionCard
               key={trans.id}
@@ -75,6 +84,7 @@ function Dashboard() {
               category={trans.category}
             />
           ))}
+
         </div>
       </div>
     </div>

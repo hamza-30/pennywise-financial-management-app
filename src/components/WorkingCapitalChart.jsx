@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import { TiChartLineOutline } from "react-icons/ti";
 
 import {
   Area,
@@ -81,6 +82,16 @@ function WorkingCapitalChart() {
         }
       });
   }, [transactions, dateFilter]);
+
+  if (!transactions || transactions.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-gray-400">
+        <div className="text-5xl mb-2 text-[#ade110]"><TiChartLineOutline /></div>
+        <p className="text-base font-medium">No data available for this month</p>
+        <p className="text-sm">Add a transaction to see your capital flow.</p>
+      </div>
+    );
+  }
 
   return (
     <div className={`h-full w-full flex flex-col gap-y-5`}>
