@@ -55,7 +55,10 @@ function AddTransaction({
       setDate(formatDateForInput(editingTransaction.date));
       setCategory(editingTransaction.category);
     }
-  }, [editingTransaction]);
+    else{
+      clearStates()
+    }
+  }, [editingTransaction, addTransactionOpen]);
 
   function submit(e) {
     e.preventDefault();

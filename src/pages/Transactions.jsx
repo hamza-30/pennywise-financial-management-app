@@ -102,7 +102,10 @@ function Transactions() {
       <div
         className={`inset-0
         ${addTransactionOpen ? "fixed" : "hidden"}`}
-        onClick={() => setAddTransactionOpen(!addTransactionOpen)}
+        onClick={() => {
+          setAddTransactionOpen(!addTransactionOpen)
+          setEditingTransaction(null)
+        }}
       ></div>
       <AddTransaction
         addTransactionOpen={addTransactionOpen}
