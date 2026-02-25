@@ -146,7 +146,7 @@ function WorkingCapitalChart() {
         </div>
       </div>
 
-      <ResponsiveContainer width="100%" height="100%" debounce={100}>
+      <ResponsiveContainer width="100%" height="100%" debounce={300}>
         <AreaChart
           data={chartData}
           margin={{ left: -22, right: 0 }}

@@ -6,7 +6,7 @@ function SpendingTrendChart({spendingTrendChartData}) {
     <>
     <div className={`flex-1 min-h-92 lg:min-h-100 pl-6 pr-7 pt-5 pb-2 bg-white rounded-xl shadow-[0_0px_8px_rgba(0,0,0,0.04)] flex flex-col justify-between gap-y-5`}>
         <div className={`text-[1.13rem] font-semibold text-[rgb(17,30,67)] `}>Spending Trend</div>
-        <ResponsiveContainer width="100%" height="100%" debounce={100}>
+        <ResponsiveContainer width="100%" height="100%" debounce={300}>
             <AreaChart
                 data={spendingTrendChartData}
                 margin={{ left: -22, right: 0 }}

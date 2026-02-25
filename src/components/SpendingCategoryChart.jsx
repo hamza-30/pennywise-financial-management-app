@@ -12,7 +12,7 @@ function SpendingCategoryChart({spendingCategoryChartData}) {
     <>
     <div className={`flex-1 min-h-116 lg:min-h-100 px-6 pt-5 pb-9.5 bg-white rounded-xl shadow-[0_0px_8px_rgba(0,0,0,0.04)]`}>
         <div className={`text-[1.13rem] font-semibold text-[#111e43]`}>Spending by Category</div>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" debounce={300}>
             <PieChart>
                 <Pie
                     data={dateWithColors}
