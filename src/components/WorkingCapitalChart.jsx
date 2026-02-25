@@ -17,7 +17,7 @@ function WorkingCapitalChart() {
   const { transactions } = useTransactions();
 
   const [graphDateModalOpen, setGraphDateModalOpen] = useState(false);
-  const [dateFilter, setDateFilter] = useState("Last 30 days");
+  const [dateFilter, setDateFilter] = useState("This month");
 
   let chartData = useMemo(() => {
     let computeChartData = transactions.reduce((acc, trans) => {
@@ -57,14 +57,9 @@ function WorkingCapitalChart() {
         let transactionDate = new Date(trans.fullDate);
 
         switch (dateFilter) {
-          case "Last 30 days":
-            let previousMonthDate = new Date(
-              today.getFullYear(),
-              today.getMonth(),
-              today.getDate() - 30,
-            );
+          case "This month":
             return (
-              transactionDate > previousMonthDate && transactionDate <= today
+              transactionDate.getMonth() == today.getMonth() && transactionDate.getFullYear() == today.getFullYear()
             );
 
           case "Last 7 days":
@@ -141,9 +136,9 @@ function WorkingCapitalChart() {
                 </li>
                 <li
                   className={`py-1 pl-1.5 hover:bg-[#eeeded] active:bg-[#eeeded]`}
-                  onClick={() => setDateFilter("Last 30 days")}
+                  onClick={() => setDateFilter("This month")}
                 >
-                  Last 30 days
+                  This month
                 </li>
               </ul>
             </div>
