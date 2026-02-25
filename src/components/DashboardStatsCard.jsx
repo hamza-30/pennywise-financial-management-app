@@ -19,7 +19,7 @@ function DashboardStatsCard({description, amount}) {
             <div className={`text-[#a8a7a7] text-sm font-medium`}>{description}</div>
             <div className={`text-[1.8rem] font-semibold font-[Calibri]
             ${description == "Total balance" && "text-white"}    
-            `}>${amount}</div>
+            `}>{amount > 0 ? `$${amount}`: `-$${Math.abs(amount)}`}</div>
         </div>
     </div>
   ) 
