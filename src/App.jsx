@@ -1,28 +1,41 @@
-import { useState } from 'react'
-import './App.css'
-import Sidebar from './components/Sidebar'
-import Header from './components/Header'
-import Transactions from './pages/Transactions'
-import TransactionContextProvider from './context/TransactionContext/TransactionContextProvider'
+import { useState } from "react";
+import "./App.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Layout from "./Layout";
+import Dashboard from "./pages/Dashboard";
+import Transactions from "./pages/Transactions";
+import Analytics from "./pages/Analytics";
+import TransactionContextProvider from "./context/TransactionContext/TransactionContextProvider";
 
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          path: "",
+          element: <Dashboard />,
+        },
+        {
+          path: "transactions",
+          element: <Transactions />,
+        },
+        {
+          path: "analytics",
+          element: <Analytics />,
+        },
+      ],
+    },
+  ]);
 
   return (
     <>
-      <div className='w-full h-screen flex overflow-hidden'>
-        <Sidebar />
-
-        <div className='flex flex-col flex-1  overflow-y-auto'>
-          <Header />
-          <main className={`flex-1`}>
-            <TransactionContextProvider>
-              <Transactions />
-            </TransactionContextProvider>
-          </main>
-        </div>
-      </div>
+      <TransactionContextProvider>
+        <RouterProvider router={router} />
+      </TransactionContextProvider>
     </>
-  ) 
+  );
 }
 
-export default App
+export default App;

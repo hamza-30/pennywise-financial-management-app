@@ -8,6 +8,7 @@ import { GrAnalytics } from "react-icons/gr";
 import { IoSettingsOutline } from "react-icons/io5";
 import { HiOutlineLogout } from "react-icons/hi";
 import SidebarContext from "../context/SidebarContext/SidebarContext";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
 
@@ -67,35 +68,34 @@ const Sidebar = () => {
             className={`pt-10 flex flex-col gap-y-1 transition-all duration-300
             `}
           >
-            <a
-              href=""
-              onClick={(e) => e.preventDefault()}
-              className={`w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl hover:bg-gray-100 hover:text-black active:bg-[#c4f82b] active:font-semibold
-                
-                `}
+            <NavLink
+              to={""}
+              className={({isActive}) => `w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl 
+              ${isActive ? "bg-[#c4f82b] text-black font-semibold": "text-[#898e96] hover:bg-gray-100 hover:text-black "}
+              `}
             >
               <MdOutlineDashboard className={`text-2xl mr-3`} />
               <p className={`text-[1rem] `}>Dashboard</p>
-            </a>
+            </NavLink>
             
-            <a
-              href=""
-              onClick={(e) => e.preventDefault()}
-              className={`w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl hover:bg-gray-100 hover:text-black active:bg-[#c4f82b] active:font-semibold
-                `}
+            <NavLink
+              to={"/transactions"}
+              className={({isActive}) => `w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl 
+              ${isActive ? "bg-[#c4f82b] text-black font-semibold": "text-[#898e96] hover:bg-gray-100 hover:text-black "}
+              `}
             >
               <IoCardOutline className={`text-2xl mr-3`} />
               <p className={`text-[1rem] `}>Transactions</p>
-            </a>
-            <a
-              href=""
-              onClick={(e) => e.preventDefault()}
-              className={`w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl hover:bg-gray-100 hover:text-black active:bg-[#c4f82b] active:font-semibold
-                `}
+            </NavLink>
+            <NavLink
+              to={"/analytics"}
+              className={({isActive}) => `w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl
+              ${isActive ? "bg-[#c4f82b] text-black font-semibold": "text-[#898e96] hover:bg-gray-100 hover:text-black "}
+              `}
             >
               <GrAnalytics className={`text-2xl mr-3`} />
               <p className={`text-[1rem] `}>Analytics</p>
-            </a>
+            </NavLink>
             <a
               href=""
               onClick={(e) => e.preventDefault()}

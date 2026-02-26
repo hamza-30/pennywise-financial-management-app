@@ -5,6 +5,7 @@ import { IoReceiptSharp } from "react-icons/io5";
 import RecentTransactionCard from "../components/RecentTransactionCard";
 import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
 import WorkingCapitalChart from "../components/WorkingCapitalChart";
+import { Link } from "react-router-dom";
 
 function Dashboard() {
   const { transactions } = useTransactions();
@@ -58,11 +59,12 @@ function Dashboard() {
           <span className={`text-[1.2rem] text-[#111e43] font-semibold`}>
             Recent Transactions
           </span>
-          <span
+          <Link
+            to={"/transactions"}
             className={`flex items-center text-sm gap-x-1 text-[#c4f82a] hover:text-[#b2e220] active:text-[#b2e220] cursor-pointer`}
           >
             View All <FiArrowRight className={`text-base`} />
-          </span>
+          </Link>
         </div>
 
         <div className={`flex flex-col gap-y-4`}>
