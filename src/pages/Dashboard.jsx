@@ -38,6 +38,10 @@ function Dashboard() {
     <div
       className={`flex flex-col h-full gap-y-8 md:gap-y-6 pt-8 pb-5 px-4 lg:px-8 overflow-hidden`}
     >
+      <span className={`text-2xl font-bold block md:hidden`}>
+        Dashboard
+      </span>
+
       <div
         className={`flex flex-col h-fit md:flex-row justify-between gap-x-7 gap-y-5`}
       >
