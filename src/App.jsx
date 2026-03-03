@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./Layout";
 import Dashboard from "./pages/Dashboard";
@@ -7,33 +6,39 @@ import Transactions from "./pages/Transactions";
 import Analytics from "./pages/Analytics";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/login",
-      element: <Login />
+      element: <Login />,
     },
     {
       path: "/signup",
-      element: <Signup />
+      element: <Signup />,
     },
 
     {
-      path: "/",
-      element: <Layout />,
+      element: <ProtectedRoute />,
       children: [
         {
-          path: "",
-          element: <Dashboard />,
-        },
-        {
-          path: "transactions",
-          element: <Transactions />,
-        },
-        {
-          path: "analytics",
-          element: <Analytics />,
+          path: "/",
+          element: <Layout />,
+          children: [
+            {
+              path: "",
+              element: <Dashboard />,
+            },
+            {
+              path: "transactions",
+              element: <Transactions />,
+            },
+            {
+              path: "analytics",
+              element: <Analytics />,
+            },
+          ],
         },
       ],
     },
