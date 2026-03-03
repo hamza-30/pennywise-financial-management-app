@@ -5,7 +5,6 @@ import Layout from "./Layout";
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import Analytics from "./pages/Analytics";
-import TransactionContextProvider from "./context/TransactionContext/TransactionContextProvider";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
@@ -42,9 +41,7 @@ function App() {
 
   return (
     <>
-      <TransactionContextProvider>
-        <RouterProvider router={router} />
-      </TransactionContextProvider>
+      <RouterProvider router={router} />
     </>
   );
 }
