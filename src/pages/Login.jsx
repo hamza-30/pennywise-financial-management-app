@@ -113,7 +113,9 @@ function Login() {
             </div>
 
             <div className="text-[0.82rem] text-right mt-3 underline text-gray-600 cursor-pointer hover:text-gray-400 mb-10">
-              Forgot password?
+              <Link to={"/forgotpassword"}>
+                Forgot password?
+              </Link>
             </div>
 
             <button className="w-full py-3.5 bg-[#c2f139] flex items-center justify-center rounded-3xl hover:bg-[#a8d522] text-[#2c2c2c] font-medium transition-all active:scale-[0.98]">
