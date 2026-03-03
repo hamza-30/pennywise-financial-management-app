@@ -9,10 +9,19 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { HiOutlineLogout } from "react-icons/hi";
 import SidebarContext from "../context/SidebarContext/SidebarContext";
 import { NavLink } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext/AuthContextProvider";
 
 const Sidebar = () => {
+  const { isOpen, setIsOpen } = useContext(SidebarContext);
+  const { logout } = useAuthContext();
 
-  const {isOpen, setIsOpen} = useContext(SidebarContext)
+  const handleLogoutClick = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error.message);
+    }
+  };
 
   return (
     <>
@@ -70,18 +79,22 @@ const Sidebar = () => {
           >
             <NavLink
               to={""}
-              className={({isActive}) => `w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl 
-              ${isActive ? "bg-[#c4f82b] text-black font-semibold": "text-[#898e96] hover:bg-gray-100 hover:text-black "}
+              className={({
+                isActive,
+              }) => `w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl 
+              ${isActive ? "bg-[#c4f82b] text-black font-semibold" : "text-[#898e96] hover:bg-gray-100 hover:text-black "}
               `}
             >
               <MdOutlineDashboard className={`text-2xl mr-3`} />
               <p className={`text-[1rem] `}>Dashboard</p>
             </NavLink>
-            
+
             <NavLink
               to={"/transactions"}
-              className={({isActive}) => `w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl 
-              ${isActive ? "bg-[#c4f82b] text-black font-semibold": "text-[#898e96] hover:bg-gray-100 hover:text-black "}
+              className={({
+                isActive,
+              }) => `w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl 
+              ${isActive ? "bg-[#c4f82b] text-black font-semibold" : "text-[#898e96] hover:bg-gray-100 hover:text-black "}
               `}
             >
               <IoCardOutline className={`text-2xl mr-3`} />
@@ -89,8 +102,10 @@ const Sidebar = () => {
             </NavLink>
             <NavLink
               to={"/analytics"}
-              className={({isActive}) => `w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl
-              ${isActive ? "bg-[#c4f82b] text-black font-semibold": "text-[#898e96] hover:bg-gray-100 hover:text-black "}
+              className={({
+                isActive,
+              }) => `w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl
+              ${isActive ? "bg-[#c4f82b] text-black font-semibold" : "text-[#898e96] hover:bg-gray-100 hover:text-black "}
               `}
             >
               <GrAnalytics className={`text-2xl mr-3`} />
@@ -107,6 +122,7 @@ const Sidebar = () => {
           </div>
 
           <div
+            onClick={handleLogoutClick}
             className={`w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl hover:text-red-400 active:text-red-400 cursor-pointer`}
           >
             <HiOutlineLogout className={`text-2xl mr-3`} />
