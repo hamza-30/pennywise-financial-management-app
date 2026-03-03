@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoEyeOutline } from "react-icons/io5";
 import { IoEyeOffOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../firebase/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 function Login() {
   const {
@@ -11,6 +13,24 @@ function Login() {
     formState: { errors },
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
+
+  const onSubmit = async (data) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password,
+      );
+
+      console.log("User signed in", userCredential.user);
+      navigate("/");
+    } catch (error) {
+      console.error("Signup error", error.code, error.message);
+      alert(error.message);
+    }
+  };
 
   return (
     <div className="relative w-screen h-screen overflow-hidden">
@@ -30,7 +50,7 @@ function Login() {
             Welcome back.
           </div>
 
-          <form onSubmit={handleSubmit((data) => console.log(data))}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col group transition-colors duration-300 ease-in mb-7">
               <label className="text-[0.7rem] tracking-wider font-medium text-gray-600 group-focus-within:text-[#c2f139]">
                 EMAIL ADDRESS
