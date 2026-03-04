@@ -7,6 +7,13 @@ import AddTransaction from "../components/AddTransaction";
 import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
 import { checkDate } from "../utils/dateUtils";
 
+const formatAmount = (amt) => {
+  return Number(amt || 0).toLocaleString(undefined, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  });
+}
+
 function Transactions() {
   const [dateFilter, setDateFilter] = useState("This month");
   const [typeFilter, setTypeFilter] = useState("All");
@@ -254,7 +261,7 @@ function Transactions() {
                   type={trans.type}
                   category={trans.category}
                   date={trans.date}
-                  amount={trans.amount}
+                  amount={formatAmount(trans.amount)}
                   setEditingTransaction={setEditingTransaction}
                   setAddTransactionOpen={setAddTransactionOpen}
                   transaction={trans}
@@ -273,7 +280,7 @@ function Transactions() {
                 type={trans.type}
                 category={trans.category}
                 date={trans.date}
-                amount={trans.amount}
+                amount={formatAmount(trans.amount)}
                 setEditingTransaction={setEditingTransaction}
                 setAddTransactionOpen={setAddTransactionOpen}
                 transaction={trans}
