@@ -167,7 +167,9 @@ function Analytics() {
   };
 
   const analyticsData = useMemo(() => {
-    let dateFilteredTransactions = transactions.filter((trans) =>
+    const standardizedTransactions = transactions.map((trans) => ({...trans, amount: Number(trans.amount || 0)}))
+
+    let dateFilteredTransactions = standardizedTransactions.filter((trans) =>
       filterByDate(trans, dateFilter),
     );
     let previousDateFilteredTransactions = transactions.filter((trans) =>
@@ -245,7 +247,7 @@ function Analytics() {
 
     const spendingCategoryChartData = Object.entries(categoryObj).map(
       ([categ, val]) => {
-        return { category: categ, amount: val };
+        return { category: categ, amount: Number(val.toFixed(2)) };
       },
     );
 
