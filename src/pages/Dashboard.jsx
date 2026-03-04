@@ -7,6 +7,13 @@ import { useTransactions } from "../context/TransactionContext/TransactionContex
 import WorkingCapitalChart from "../components/WorkingCapitalChart";
 import { Link } from "react-router-dom";
 
+const formatAmount = (amt) => {
+  return Number(amt || 0).toLocaleString(undefined, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  });
+}
+
 function Dashboard() {
   const { transactions } = useTransactions();
   const [initialBalance, setInitialBalance] = useState(0)
@@ -16,14 +23,14 @@ function Dashboard() {
     let today = new Date()
 
     return transDate.getMonth() == today.getMonth()
-  }).reduce((acc, trans) => acc + trans.amount, 0)
+  }).reduce((acc, trans) => acc + Number(trans.amount), 0)
 
   const expense = transactions.filter((trans) => trans.type == "Expense").filter((trans) => {
     let transDate = new Date(trans.date)
     let today = new Date()
 
     return transDate.getMonth() == today.getMonth()
-  }).reduce((acc, trans) => acc + trans.amount, 0)
+  }).reduce((acc, trans) => acc + Number(trans.amount), 0)
 
   const filteredTransactions = transactions
     .sort((a, b) => {
@@ -85,7 +92,7 @@ function Dashboard() {
               key={trans.id}
               desc={trans.desc}
               type={trans.type}
-              amount={trans.amount}
+              amount={formatAmount(trans.amount)}
               date={trans.date}
               category={trans.category}
             />
