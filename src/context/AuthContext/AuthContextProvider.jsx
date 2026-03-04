@@ -14,7 +14,7 @@ function AuthContextProvider({children}) {
         })
 
         return () => unsubscribe()
-    })
+    }, [])
 
     const logout = () => signOut(auth)
 
