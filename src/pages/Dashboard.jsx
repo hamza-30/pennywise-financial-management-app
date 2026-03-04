@@ -11,19 +11,19 @@ function Dashboard() {
   const { transactions } = useTransactions();
   const [initialBalance, setInitialBalance] = useState(0)
 
-  const income = Number( (transactions.filter((trans) => trans.type == "Income").filter((trans) => {
+  const income = transactions.filter((trans) => trans.type == "Income").filter((trans) => {
     let transDate = new Date(trans.date)
     let today = new Date()
 
     return transDate.getMonth() == today.getMonth()
-  }).reduce((acc, trans) => acc + trans.amount, 0)).toFixed(2) )
+  }).reduce((acc, trans) => acc + trans.amount, 0)
 
-  const expense = Number( (transactions.filter((trans) => trans.type == "Expense").filter((trans) => {
+  const expense = transactions.filter((trans) => trans.type == "Expense").filter((trans) => {
     let transDate = new Date(trans.date)
     let today = new Date()
 
     return transDate.getMonth() == today.getMonth()
-  }).reduce((acc, trans) => acc + trans.amount, 0)).toFixed(2) )
+  }).reduce((acc, trans) => acc + trans.amount, 0)
 
   const filteredTransactions = transactions
     .sort((a, b) => {

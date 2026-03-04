@@ -4,6 +4,12 @@ import { HiTrendingUp } from "react-icons/hi";
 import { HiTrendingDown } from "react-icons/hi";
 
 function DashboardStatsCard({description, amount}) {
+    const numericAmount = Number(amount || 0)
+    const formattedAmount = Math.abs(numericAmount).toLocaleString(undefined, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+    });
+
   return (
     <div
         className={`flex-1 flex items-center justify-start gap-x-4 px-6 py-5 rounded-xl shadow-[0_0px_8px_rgba(0,0,0,0.04)]
@@ -19,7 +25,7 @@ function DashboardStatsCard({description, amount}) {
             <div className={`text-[#a8a7a7] text-sm font-medium`}>{description}</div>
             <div className={`text-[1.8rem] font-semibold font-[Calibri]
             ${description == "Total balance" && "text-white"}    
-            `}>{amount > 0 ? `$${amount}`: `-$${Math.abs(amount)}`}</div>
+            `}>{numericAmount >= 0 ? `$${formattedAmount}` : `-$${formattedAmount}`}</div>
         </div>
     </div>
   ) 
