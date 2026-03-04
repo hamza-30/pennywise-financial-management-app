@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
-import { nanoid } from "nanoid";
 import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
 import { formatDateForInput, formatDateForUI } from "../utils/dateUtils";
 
@@ -74,7 +73,7 @@ function AddTransaction({
     if (editingTransaction) {
       editTransaction(editingTransaction.id, updatedTransaction);
     } else {
-      addTransaction({ ...updatedTransaction, id: nanoid() });
+      addTransaction(updatedTransaction);
     }
 
     handleClose();
