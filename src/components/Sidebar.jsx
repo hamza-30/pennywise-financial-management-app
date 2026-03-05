@@ -15,6 +15,7 @@ const Sidebar = () => {
   const { isOpen, setIsOpen } = useContext(SidebarContext);
   const { logout } = useAuthContext();
   const { pathname } = useLocation()
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false)
 
   const handleLogoutClick = async () => {
     try {
@@ -131,12 +132,41 @@ const Sidebar = () => {
           </div>
 
           <div
-            onClick={handleLogoutClick}
+            onClick={() => setLogoutModalOpen(true)}
             className={`w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl hover:text-red-400 active:text-red-400 cursor-pointer`}
           >
             <HiOutlineLogout className={`text-2xl mr-3`} />
             <p className={`text-[1rem]`}>Logout</p>
           </div>
+        </div>
+      </div>
+
+      <div className={`inset-0 z-40
+        ${logoutModalOpen ? "fixed": "hidden"}`}
+        onClick={() => setLogoutModalOpen(false)}
+        ></div>
+      <div
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+                w-[90vw] md:w-[60vw] lg:w-120 pt-4 pb-3 px-4 md:px-6 backdrop-blur-xl flex flex-col bg-white rounded-2xl border border-gray-600 transition-all duration-300 ease-in-out z-50 gap-y-5
+                ${logoutModalOpen ? "absolute" : "hidden"}
+                `}
+      >
+        <p className={`font-medium`}>Are you sure you want to logout?</p>
+
+        <div className={`ml-auto`}>
+          <button
+            className={`px-3 py-1.5 text-sm mr-3 hover:bg-gray-100 active:bg-gray-100 rounded-lg cursor-pointer`}
+            onClick={() => setLogoutModalOpen(false)}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className={`px-3 py-1.5 text-sm w-fit text-white rounded-lg bg-[#ef4444] hover:bg-[#dc2626] active:bg-[#dc2626] cursor-pointer`}
+            onClick={handleLogoutClick}
+          >
+            Logout
+          </button>
         </div>
       </div>
     </>
