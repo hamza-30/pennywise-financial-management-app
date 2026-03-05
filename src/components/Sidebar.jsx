@@ -8,12 +8,13 @@ import { GrAnalytics } from "react-icons/gr";
 import { IoSettingsOutline } from "react-icons/io5";
 import { HiOutlineLogout } from "react-icons/hi";
 import SidebarContext from "../context/SidebarContext/SidebarContext";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext/AuthContextProvider";
 
 const Sidebar = () => {
   const { isOpen, setIsOpen } = useContext(SidebarContext);
   const { logout } = useAuthContext();
+  const { pathname } = useLocation()
 
   const handleLogoutClick = async () => {
     try {
@@ -22,6 +23,14 @@ const Sidebar = () => {
       console.error("Logout failed:", error.message);
     }
   };
+
+  useEffect(() => {
+    const isMobile = window.innerWidth < 768
+    
+    if(isMobile){
+      setIsOpen(false)
+    }
+  }, [pathname])
 
   return (
     <>
