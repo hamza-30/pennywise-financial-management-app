@@ -5,6 +5,8 @@ import { IoEyeOffOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import Spinner from "../components/Spinner";
+import { useAuthContext } from "../context/AuthContext/AuthContextProvider";
 
 function Login() {
   const {
@@ -13,10 +15,12 @@ function Login() {
     formState: { errors },
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
+  const [ isSubmitting, setIsSubmitting ] = useState(false)
 
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
+    setIsSubmitting(true)
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -27,10 +31,15 @@ function Login() {
       console.log("User signed in", userCredential.user);
       navigate("/");
     } catch (error) {
+      setIsSubmitting(false)
       console.error("Signup error", error.code, error.message);
       alert(error.message);
     }
   };
+
+  if(isSubmitting){
+    return <Spinner message={"Logging in"} fullPage={true}/>
+  }
 
   return (
     <div className="relative w-screen h-screen overflow-hidden">

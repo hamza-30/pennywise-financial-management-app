@@ -5,6 +5,8 @@ import { IoEyeOffOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { useAuthContext } from "../context/AuthContext/AuthContextProvider"
+import Spinner from "../components/Spinner"
 
 function Signup() {
   const {
@@ -16,10 +18,12 @@ function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const passwordValue = watch("password");
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
+    setIsSubmitting(true)
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -32,10 +36,15 @@ function Signup() {
       console.log("User created", userCredential.user);
       navigate("/");
     } catch (error) {
+      setIsSubmitting(false)
       console.error("Signup error", error.code, error.message);
       alert(error.message);
     }
   };
+
+  if(isSubmitting){
+    return <Spinner message={"Signing up"} fullPage={true}/>
+  }
 
   return (
     <div className="relative w-screen h-screen overflow-x-hidden overflow-y-scroll">
