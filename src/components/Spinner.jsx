@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Spinner({ message = "Loading", fullPage = "false"}) {
+function Spinner({ message = "Loading", fullPage = false}) {
   return (
     <div className={`flex flex-col items-center justify-center gap-y-3 ${fullPage ? "h-screen w-screen": "h-full w-full"}`}>
       <div 
