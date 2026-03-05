@@ -95,8 +95,8 @@ const Sidebar = () => {
               ${isActive ? "bg-[#c4f82b] text-black font-semibold" : "text-[#898e96] hover:bg-gray-100 hover:text-black "}
               `}
             >
-              <MdOutlineDashboard className={`text-2xl mr-3`} />
-              <p className={`text-[1rem] `}>Dashboard</p>
+              <MdOutlineDashboard className={`text-[1.3rem] mr-3`} />
+              <p className={`text-[1.02rem] `}>Dashboard</p>
             </NavLink>
 
             <NavLink
@@ -107,8 +107,8 @@ const Sidebar = () => {
               ${isActive ? "bg-[#c4f82b] text-black font-semibold" : "text-[#898e96] hover:bg-gray-100 hover:text-black "}
               `}
             >
-              <IoCardOutline className={`text-2xl mr-3`} />
-              <p className={`text-[1rem] `}>Transactions</p>
+              <IoCardOutline className={`text-[1.3rem] mr-3`} />
+              <p className={`text-[1.02rem] `}>Transactions</p>
             </NavLink>
             <NavLink
               to={"/analytics"}
@@ -118,16 +118,16 @@ const Sidebar = () => {
               ${isActive ? "bg-[#c4f82b] text-black font-semibold" : "text-[#898e96] hover:bg-gray-100 hover:text-black "}
               `}
             >
-              <GrAnalytics className={`text-2xl mr-3`} />
-              <p className={`text-[1rem] `}>Analytics</p>
+              <GrAnalytics className={`text-[1.3rem] mr-3`} />
+              <p className={`text-[1.02rem] `}>Analytics</p>
             </NavLink>
             <a
               href=""
               onClick={(e) => e.preventDefault()}
               className={`w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl hover:bg-gray-100 hover:text-black active:bg-[#c4f82b] active:font-semibold`}
             >
-              <IoSettingsOutline className={`text-2xl mr-3`} />
-              <p className={`text-[1rem] `}>Settings</p>
+              <IoSettingsOutline className={`text-[1.3rem] mr-3`} />
+              <p className={`text-[1.02rem] `}>Settings</p>
             </a>
           </div>
 
@@ -135,8 +135,8 @@ const Sidebar = () => {
             onClick={() => setLogoutModalOpen(true)}
             className={`w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl hover:text-red-400 active:text-red-400 cursor-pointer`}
           >
-            <HiOutlineLogout className={`text-2xl mr-3`} />
-            <p className={`text-[1rem]`}>Logout</p>
+            <HiOutlineLogout className={`text-[1.3rem] mr-3`} />
+            <p className={`text-[1.02rem]`}>Logout</p>
           </div>
         </div>
       </div>
