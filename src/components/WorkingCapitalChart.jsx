@@ -11,7 +11,6 @@ import {
   YAxis,
 } from "recharts";
 import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
-import { BiReplyAll } from "react-icons/bi";
 
 function WorkingCapitalChart() {
   const { transactions } = useTransactions();
@@ -26,22 +25,22 @@ function WorkingCapitalChart() {
           acc[trans.date] = {
             fullDate: trans.date,
             date: trans.date.slice(0, 6),
-            income: trans.amount,
+            income: Number(trans.amount),
             expense: 0,
           };
         } else {
           acc[trans.date] = {
             fullDate: trans.date,
             date: trans.date.slice(0, 6),
-            expense: trans.amount,
+            expense: Number(trans.amount),
             income: 0,
           };
         }
       } else {
         if (trans.type == "Income") {
-          acc[trans.date].income += trans.amount;
+          acc[trans.date].income += Number(trans.amount);
         } else {
-          acc[trans.date].expense += trans.amount;
+          acc[trans.date].expense += Number(trans.amount);
         }
       }
 
@@ -52,6 +51,10 @@ function WorkingCapitalChart() {
       .sort((a, b) => {
         return new Date(a.fullDate).getTime() - new Date(b.fullDate).getTime();
       })
+      .map((trans) => ({...trans, 
+        income: Number(trans.income.toFixed(2)), 
+        expense: Number(trans.expense.toFixed(2))})
+      )
       .filter((trans) => {
         let today = new Date();
         let transactionDate = new Date(trans.fullDate);
@@ -78,7 +81,7 @@ function WorkingCapitalChart() {
       });
   }, [transactions, dateFilter]);
 
-  if (!transactions || transactions.length === 0) {
+  if (chartData.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-gray-400">
         <div className="text-5xl mb-2 text-[#ade110]"><TiChartLineOutline /></div>
