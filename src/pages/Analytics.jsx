@@ -6,6 +6,7 @@ import { IoIosTrendingUp } from "react-icons/io";
 import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
 import SpendingTrendChart from "../components/SpendingTrendChart";
 import SpendingCategoryChart from "../components/SpendingCategoryChart";
+import Spinner from "../components/Spinner";
 
 function filterByDate(transaction, dateFilter) {
   let transactionDate = new Date(transaction.date);
@@ -152,7 +153,7 @@ function calculateChangePercentage(current, previous) {
 }
 
 function Analytics() {
-  const { transactions } = useTransactions();
+  const { transactions, loadingTransactions } = useTransactions();
 
   let filterDropdown = ["Last 7 Days", "This Month", "Last Month", "This Year"];
 
@@ -273,6 +274,10 @@ function Analytics() {
     spendingTrendChartData,
     spendingCategoryChartData,
   } = analyticsData;
+
+  if(loadingTransactions){
+    return <Spinner />
+  }
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoReceiptSharp } from "react-icons/io5";
 import TransactionRow from "../components/TransactionRow";
@@ -6,6 +6,7 @@ import TransactionCard from "../components/TransactionCard";
 import AddTransaction from "../components/AddTransaction";
 import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
 import { checkDate } from "../utils/dateUtils";
+import Spinner from "../components/Spinner";
 
 const formatAmount = (amt) => {
   return Number(amt || 0).toLocaleString(undefined, {
@@ -24,7 +25,7 @@ function Transactions() {
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [searchTransaction, setSearchTransaction] = useState("")
 
-  const {transactions, deleteTransaction} = useTransactions()
+  const {transactions, deleteTransaction, loadingTransactions} = useTransactions()
 
   let categories = [
     { name: "All"}, 
@@ -102,6 +103,10 @@ function Transactions() {
       setDeletingTransaction(null)
       setDeleteModalOpen(!deleteModalOpen)
     }
+  }
+
+  if(loadingTransactions){
+    return <Spinner />
   }
 
   return (

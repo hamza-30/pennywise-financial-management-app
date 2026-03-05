@@ -6,6 +6,7 @@ import RecentTransactionCard from "../components/RecentTransactionCard";
 import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
 import WorkingCapitalChart from "../components/WorkingCapitalChart";
 import { Link } from "react-router-dom";
+import Spinner from "../components/Spinner";
 
 const formatAmount = (amt) => {
   return Number(amt || 0).toLocaleString(undefined, {
@@ -15,7 +16,7 @@ const formatAmount = (amt) => {
 }
 
 function Dashboard() {
-  const { transactions } = useTransactions();
+  const { transactions, loadingTransactions } = useTransactions();
   const [initialBalance, setInitialBalance] = useState(0)
 
   const income = transactions.filter((trans) => trans.type == "Income").filter((trans) => {
@@ -40,6 +41,10 @@ function Dashboard() {
       return dateB - dateA;
     })
     .slice(0, 5);
+
+  if(loadingTransactions){
+    return <Spinner />
+  }
 
   return (
     <div
