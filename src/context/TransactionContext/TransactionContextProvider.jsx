@@ -16,13 +16,17 @@ import { db } from "../../firebase/firebase";
 
 function TransactionContextProvider({ children }) {
   const [transactions, setTransactions] = useState([]);
+  const [loadingTransactions, setLoadingTransactions] = useState(true)
   const { user } = useAuthContext();
 
   useEffect(() => {
     if (!user) {
       setTransactions([]);
+      setLoadingTransactions(false);
       return;
     }
+
+    setLoadingTransactions(true)
 
     const colRef = collection(db, "transactions");
     const q = query(colRef, where("userId", "==",  user.uid));
@@ -36,9 +40,11 @@ function TransactionContextProvider({ children }) {
         }));
 
         setTransactions(remoteTransactions);
+        setLoadingTransactions(false)
       },
       (error) => {
         console.error("Firestore Listener Error:", error.message);
+        setLoadingTransactions(false)
       },
     );
 
@@ -72,7 +78,7 @@ function TransactionContextProvider({ children }) {
       await updateDoc(docRef, updatedTransaction)
 
     } catch (error) {
-      console.error("Error deleting transaction:", error)
+      console.error("Error updating transaction:", error)
     }
   }
 
@@ -83,6 +89,7 @@ function TransactionContextProvider({ children }) {
         addTransaction,
         deleteTransaction,
         editTransaction,
+        loadingTransactions,
       }}
     >
       {children}
