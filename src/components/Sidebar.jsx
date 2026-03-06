@@ -14,8 +14,8 @@ import { useAuthContext } from "../context/AuthContext/AuthContextProvider";
 const Sidebar = () => {
   const { isOpen, setIsOpen } = useContext(SidebarContext);
   const { logout } = useAuthContext();
-  const { pathname } = useLocation()
-  const [logoutModalOpen, setLogoutModalOpen] = useState(false)
+  const { pathname } = useLocation();
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
 
   const handleLogoutClick = async () => {
     try {
@@ -26,12 +26,12 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    const isMobile = window.innerWidth < 768
-    
-    if(isMobile){
-      setIsOpen(false)
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile) {
+      setIsOpen(false);
     }
-  }, [pathname])
+  }, [pathname]);
 
   return (
     <>
@@ -121,14 +121,17 @@ const Sidebar = () => {
               <GrAnalytics className={`text-[1.3rem] mr-3`} />
               <p className={`text-[1.02rem] `}>Analytics</p>
             </NavLink>
-            <a
-              href=""
-              onClick={(e) => e.preventDefault()}
-              className={`w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl hover:bg-gray-100 hover:text-black active:bg-[#c4f82b] active:font-semibold`}
+            <NavLink
+              to={"/settings"}
+              className={({
+                isActive,
+              }) => `w-full flex items-center text-[#898e96] pl-4 py-3 rounded-xl
+              ${isActive ? "bg-[#c4f82b] text-black font-semibold" : "text-[#898e96] hover:bg-gray-100 hover:text-black "}
+              `}
             >
               <IoSettingsOutline className={`text-[1.3rem] mr-3`} />
               <p className={`text-[1.02rem] `}>Settings</p>
-            </a>
+            </NavLink>
           </div>
 
           <div
@@ -141,10 +144,11 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className={`inset-0 z-40
-        ${logoutModalOpen ? "fixed": "hidden"}`}
+      <div
+        className={`inset-0 z-40
+        ${logoutModalOpen ? "fixed" : "hidden"}`}
         onClick={() => setLogoutModalOpen(false)}
-        ></div>
+      ></div>
       <div
         className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
                 w-[90vw] md:w-[60vw] lg:w-120 pt-4 pb-3 px-4 md:px-6 backdrop-blur-xl flex flex-col bg-white rounded-2xl border border-gray-600 transition-all duration-300 ease-in-out z-50 gap-y-5

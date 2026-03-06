@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PasswordReset from "./pages/PasswordReset";
+import Settings from "./pages/Settings";
 
 function App() {
   const router = createBrowserRouter([
@@ -42,6 +43,10 @@ function App() {
             {
               path: "analytics",
               element: <Analytics />,
+            },
+            {
+              path: "settings",
+              element: <Settings />,
             },
           ],
         },
