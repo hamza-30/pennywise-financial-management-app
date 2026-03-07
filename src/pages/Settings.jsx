@@ -8,7 +8,7 @@ import { useTransactions } from "../context/TransactionContext/TransactionContex
 function Settings() {
   const [warningModalOpen, setWarningModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const { deleteAllTransactions } = useTransactions();
+  const { transactions , deleteAllTransactions } = useTransactions();
 
   async function handleDeleteClick() {
     setIsDeleting(true);
@@ -27,6 +27,33 @@ function Settings() {
     if (!isDeleting) {
       setWarningModalOpen(false);
     }
+  }
+
+  function handleExportClick() {
+    if(transactions.length == 0){
+      alert("No transactions to download at this time.")
+      return
+    }
+
+    const filteredTransactions = transactions.map((trans) => trans).sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+
+    const header = "Date,Description,Type,Category,Amount\n"
+    const rows = filteredTransactions.map((trans) => {
+      return `"${trans.date}","${trans.desc}",${trans.type},${trans.category},${trans.amount}\n`
+    }).join('')
+
+    const csvContent = header + rows
+    const blob = new Blob([csvContent], {type: "text/csv;charset=utf-8;"})
+
+    const url = URL.createObjectURL(blob)
+
+    const element = document.createElement("a")
+    element.setAttribute("href", url)
+    const fileName = `PennyWise_Export_${new Date().toISOString().split('T')[0]}.csv`;
+    element.setAttribute("download", fileName)
+    element.click()
+
+    URL.revokeObjectURL(url)
   }
 
   return (
@@ -60,7 +87,8 @@ function Settings() {
                 Download your transaction history
               </span>
             </div>
-            <div
+            <button
+              onClick={handleExportClick}
               className={`flex items-center justify-center px-2 md:w-30 h-7.5 rounded-lg gap-x-2 bg-[#292929] hover:bg-[#292929c3] active:bg-[#292929c3] text-white cursor-pointer transition-all ease-in duration-100
                    active:ring-[#292929] active:ring-[0.15rem] active:ring-offset-2`}
             >
@@ -68,7 +96,7 @@ function Settings() {
               <span className={`text-sm md:text-[0.95rem] font-medium`}>
                 Export CSV
               </span>
-            </div>
+            </button>
           </div>
 
           <div className={`flex justify-between items-center`}>
@@ -82,7 +110,7 @@ function Settings() {
                 Permanently remove all transactions
               </span>
             </div>
-            <div
+            <button
               onClick={() => setWarningModalOpen(true)}
               className={`flex items-center justify-center px-2 md:w-30 h-7.5 rounded-lg gap-x-2 bg-red-50 hover:bg-red-100 active:bg-red-100 cursor-pointer text-red-500 transition-all ease-in duration-100
                  active:ring-[0.15rem] active:ring-offset-2`}
@@ -91,7 +119,7 @@ function Settings() {
               <span className={`text-sm md:text-[0.95rem] font-medium`}>
                 Delete All
               </span>
-            </div>
+            </button>
           </div>
         </div>
       </div>
