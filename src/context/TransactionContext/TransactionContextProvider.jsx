@@ -10,6 +10,8 @@ import {
   query,
   where,
   doc,
+  getDocs,
+  writeBatch,
 } from "firebase/firestore";
 import { useAuthContext } from "../AuthContext/AuthContextProvider";
 import { db } from "../../firebase/firebase";
@@ -82,12 +84,44 @@ function TransactionContextProvider({ children }) {
     }
   }
 
+  async function deleteAllTransactions() {
+  if (!user) return;
+
+  try {
+    const colRef = collection(db, "transactions");
+    const q = query(colRef, where("userId", "==", user.uid));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) return;
+
+    const docs = querySnapshot.docs;
+    const batchSize = 500;
+
+    for (let i = 0; i < docs.length; i += batchSize) {
+      const batch = writeBatch(db);
+      const chunk = docs.slice(i, i + batchSize);
+
+      chunk.forEach((doc) => {
+        batch.delete(doc.ref);
+      });
+
+      await batch.commit();
+    }
+
+    console.log(`Deleted ${docs.length} transactions successfully.`);
+  } catch (error) {
+    console.error("Batch delete failed:", error);
+    throw error;
+  }
+}
+
   return (
     <TransactionContext.Provider
       value={{
         transactions,
         addTransaction,
         deleteTransaction,
+        deleteAllTransactions,
         editTransaction,
         loadingTransactions,
       }}
