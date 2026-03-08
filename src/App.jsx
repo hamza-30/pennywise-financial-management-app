@@ -9,6 +9,7 @@ import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PasswordReset from "./pages/PasswordReset";
 import Settings from "./pages/Settings";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const router = createBrowserRouter([
@@ -57,6 +58,10 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
+      <Toaster 
+        position={"top-center"}
+        reverseOrder={false}
+      />
     </>
   );
 }

@@ -4,6 +4,7 @@ import { FiDownload } from "react-icons/fi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TbAlertTriangle } from "react-icons/tb";
 import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
+import { toast } from "react-hot-toast"
 
 function Settings() {
   const [warningModalOpen, setWarningModalOpen] = useState(false);
@@ -12,12 +13,17 @@ function Settings() {
 
   async function handleDeleteClick() {
     setIsDeleting(true);
+    const toastId = toast.loading("Wiping your data...")
 
     try {
       await deleteAllTransactions();
+      toast.success("All transactions cleared.", {id: toastId})
       setWarningModalOpen(false);
+
     } catch (error) {
       console.error("Error deleting data:", error);
+      toast.error("Failed to delete data. Try again.", {id: toastId})
+      
     } finally {
       setIsDeleting(false);
     }
@@ -31,7 +37,7 @@ function Settings() {
 
   function handleExportClick() {
     if(transactions.length == 0){
-      alert("No transactions to download at this time.")
+      toast.error("No transactions to download.", {duration: 3000})
       return
     }
 
@@ -52,6 +58,8 @@ function Settings() {
     const fileName = `PennyWise_Export_${new Date().toISOString().split('T')[0]}.csv`;
     element.setAttribute("download", fileName)
     element.click()
+
+    toast.success("CSV exported successfully!", {duration: 3000})
 
     URL.revokeObjectURL(url)
   }
@@ -153,7 +161,7 @@ function Settings() {
           <button
             type="submit"
             disabled={isDeleting}
-            className={`min-w-[11rem] py-1.5 text-sm w-fit text-white rounded-lg bg-[#ef4444] hover:bg-[#dc2626] active:bg-[#dc2626] cursor-pointer`}
+            className={`min-w-44 py-1.5 text-sm w-fit text-white rounded-lg bg-[#ef4444] hover:bg-[#dc2626] active:bg-[#dc2626] cursor-pointer`}
             onClick={handleDeleteClick}
           >
             {isDeleting ? "Deleting everything..." : "Delete All Transactions"}

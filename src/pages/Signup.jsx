@@ -5,8 +5,9 @@ import { IoEyeOffOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { useAuthContext } from "../context/AuthContext/AuthContextProvider"
-import Spinner from "../components/Spinner"
+import { useAuthContext } from "../context/AuthContext/AuthContextProvider";
+import Spinner from "../components/Spinner";
+import { toast } from "react-hot-toast";
 
 function Signup() {
   const {
@@ -18,12 +19,12 @@ function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const passwordValue = watch("password");
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -35,15 +36,36 @@ function Signup() {
 
       console.log("User created", userCredential.user);
       navigate("/");
+      toast.success(`Welcome to PennyWise, ${data.fullname}!`, { duration: 2000 });
     } catch (error) {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
       console.error("Signup error", error.code, error.message);
-      alert(error.message);
+      
+      let errorMessage = "Registration failed. Please try again.";
+    
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          errorMessage = "This email is already registered.";
+          break;
+        case "auth/invalid-email":
+          errorMessage = "Please provide a valid email address.";
+          break;
+        case "auth/weak-password":
+          errorMessage = "Password is too weak. Try a stronger one.";
+          break;
+        case "auth/network-request-failed":
+          errorMessage = "Network error. Check your connection.";
+          break;
+        default:
+          errorMessage = error.message;
+      }
+
+      toast.error(errorMessage, { duration: 2000 });
     }
   };
 
-  if(isSubmitting){
-    return <Spinner message={"Signing up"} fullPage={true}/>
+  if (isSubmitting) {
+    return <Spinner message={"Signing up"} fullPage={true} />;
   }
 
   return (

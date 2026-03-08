@@ -15,6 +15,7 @@ import {
 } from "firebase/firestore";
 import { useAuthContext } from "../AuthContext/AuthContextProvider";
 import { db } from "../../firebase/firebase";
+import { toast } from "react-hot-toast"
 
 function TransactionContextProvider({ children }) {
   const [transactions, setTransactions] = useState([]);
@@ -58,9 +59,11 @@ function TransactionContextProvider({ children }) {
       await addDoc(collection(db, "transactions"), {...newTransaction,
         userId: user.uid
       })
+      toast.success("Transaction added!", {duration: 3000})
 
     } catch (error) {
       console.error("Error adding transaction:", error)
+      toast.error("Error adding transaction.", {duration: 3000})
     }
   }
 
@@ -68,9 +71,11 @@ function TransactionContextProvider({ children }) {
     try {
       const docRef = doc(db, "transactions", id)
       await deleteDoc(docRef)
+      toast.success("Transaction deleted!", {duration: 3000})
 
     } catch (error) {
       console.error("Error deleting transaction:", error)
+      toast.success("Error deleting transaction.", {duration: 3000})
     }
   }
 
@@ -78,9 +83,11 @@ function TransactionContextProvider({ children }) {
     try {
       const docRef = doc(db, "transactions", id)
       await updateDoc(docRef, updatedTransaction)
+      toast.success("Transaction edited successfully!", {duration: 3000})
 
     } catch (error) {
       console.error("Error updating transaction:", error)
+      toast.error("Error editing transaction.", {duration: 3000})
     }
   }
 

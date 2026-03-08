@@ -7,6 +7,7 @@ import { auth } from "../firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Spinner from "../components/Spinner";
 import { useAuthContext } from "../context/AuthContext/AuthContextProvider";
+import { toast } from "react-hot-toast"
 
 function Login() {
   const {
@@ -30,10 +31,34 @@ function Login() {
 
       console.log("User signed in", userCredential.user);
       navigate("/");
+      toast.success("Welcome back!", {duration: 2000})
     } catch (error) {
       setIsSubmitting(false)
       console.error("Signup error", error.code, error.message);
-      alert(error.message);
+      
+      let errorMessage = "An error occurred during login."
+
+      switch(error.code){
+        case "auth/invalid-credential":
+        errorMessage = "Invalid email or password.";
+        break;
+      case "auth/user-not-found":
+        errorMessage = "No account found with this email.";
+        break;
+      case "auth/wrong-password":
+        errorMessage = "Incorrect password.";
+        break;
+      case "auth/too-many-requests":
+        errorMessage = "Too many failed attempts. Try again later.";
+        break;
+      case "auth/network-request-failed":
+        errorMessage = "Network error. Check your connection.";
+        break;
+      default:
+        errorMessage = error.message;
+      }
+
+      toast.error(errorMessage, {duration: 2000})
     }
   };
 
