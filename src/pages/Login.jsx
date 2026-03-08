@@ -80,7 +80,7 @@ function Login() {
         </div>
 
         <div>
-          <div className="text-5xl font-bold text-[#2c2c2c] mb-10">
+          <div className="text-4xl md:text-5xl font-bold text-[#2c2c2c] mb-10">
             Welcome back.
           </div>
 
