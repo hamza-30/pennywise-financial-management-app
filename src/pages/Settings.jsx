@@ -5,11 +5,34 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { TbAlertTriangle } from "react-icons/tb";
 import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
 import { toast } from "react-hot-toast"
+import { useAuthContext } from "../context/AuthContext/AuthContextProvider";
+import { db } from "../firebase/firebase";
+import { doc, updateDoc } from "firebase/firestore";
 
 function Settings() {
   const [warningModalOpen, setWarningModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const { transactions , deleteAllTransactions } = useTransactions();
+  const { user, userProfile } = useAuthContext()
+  const [tempBalance, setTempBalance] = useState(userProfile?.initialBalance || 0);
+
+  async function handleSaveBalance(){
+    if(tempBalance == userProfile?.initialBalance){
+      return
+    }
+    const toastId = toast.loading("Updating balance...")
+
+    try {
+      const userRef = doc(db, "users", user.uid)
+      await updateDoc(userRef, {
+        initialBalance: Number(tempBalance)
+      })
+      toast.success("Starting balance updated!", { id: toastId })
+    } catch (error) {
+      console.error(error)
+      toast.error("Failed to update balance.", { id: toastId })
+    }
+  }
 
   async function handleDeleteClick() {
     setIsDeleting(true);
@@ -82,6 +105,30 @@ function Settings() {
           <div className={`flex items-center gap-x-2 text-[#383f45] mb-1`}>
             <LuShield className="text-xl" />
             <span className={`text-lg font-semibold`}>Data & Privacy</span>
+          </div>
+
+          <div className={`flex justify-between items-center pb-5 border-b border-b-gray-200`}>
+            <div className={`flex flex-col w-1/2 md:w-fit`}>
+              <span
+                className={`text-base md:text-[1.03rem] leading-tight font-medium text-[#3b3a3a]`}
+              >
+                Starting Balance
+              </span>
+              <span className={`text-[0.8rem] md:text-sm text-gray-500`}>
+                Set the opening balance for your financial tracking
+              </span>
+            </div>
+            <div className="relative">
+               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+               <input
+                type="number"
+                placeholder="0.00"
+                value={tempBalance}
+                onChange={(e) => setTempBalance(e.target.value)}
+                onBlur={handleSaveBalance}
+                className="w-28 md:w-30 pl-7 pr-3 py-1 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium outline-none focus:ring focus:ring-[#c2f139] transition-all"
+              />
+            </div>
           </div>
 
           <div className={`flex justify-between items-center`}>

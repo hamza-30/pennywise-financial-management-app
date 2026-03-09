@@ -3,11 +3,12 @@ import { useForm } from "react-hook-form";
 import { IoEyeOutline } from "react-icons/io5";
 import { IoEyeOffOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../firebase/firebase";
+import { auth, db } from "../firebase/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useAuthContext } from "../context/AuthContext/AuthContextProvider";
 import Spinner from "../components/Spinner";
 import { toast } from "react-hot-toast";
+import { doc, setDoc } from "firebase/firestore";
 
 function Signup() {
   const {
@@ -33,8 +34,14 @@ function Signup() {
       );
 
       await updateProfile(userCredential.user, { displayName: data.fullname });
+      const user = userCredential.user
 
-      console.log("User created", userCredential.user);
+      await setDoc(doc(db, "users", user.uid), {
+        fullname: data.fullname,
+        email: data.email,
+        initialBalance: 0,
+      })
+      
       navigate("/");
       toast.success(`Welcome to PennyWise, ${data.fullname}!`, { duration: 2000 });
     } catch (error) {
