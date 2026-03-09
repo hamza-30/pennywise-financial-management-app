@@ -8,7 +8,7 @@ import { GrAnalytics } from "react-icons/gr";
 import { IoSettingsOutline } from "react-icons/io5";
 import { HiOutlineLogout } from "react-icons/hi";
 import SidebarContext from "../context/SidebarContext/SidebarContext";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext/AuthContextProvider";
 
 const Sidebar = () => {
@@ -47,7 +47,8 @@ const Sidebar = () => {
       ${isOpen ? "w-68 md:w-65" : "w-0"} flex flex-col`}
       >
         <div className="w-full flex justify-between pl-5 pr-4 ">
-          <div
+          <Link
+            to={""}
             className={`w-40 h-auto
               ${!isOpen ? "opacity-0" : "opacity-100"}`}
           >
@@ -56,7 +57,7 @@ const Sidebar = () => {
               alt="logo"
               className="h-full w-full object-cover"
             />
-          </div>
+          </Link>
 
           <div className="group w-fit h-fit mt-1 lg:mt-0.5">
             <FiSidebar

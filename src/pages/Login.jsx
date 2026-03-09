@@ -71,13 +71,15 @@ function Login() {
       <div className="absolute -top-20 -right-32 w-88 h-72 md:w-120 md:h-104 bg-[#c2f139] rounded-[13rem] -rotate-45"></div>
 
       <div className="px-5 pt-6 md:pl-15 md:pt-10 z-20 w-full md:w-lg relative h-screen flex flex-col gap-y-[10%] md:gap-y-[13%]">
-        <div>
+        <Link
+          to={"/login"}
+        >
           <img
             src="/src/assets/images/pennywiselogo.png"
             alt="logo"
             className="w-40"
           />
-        </div>
+        </Link>
 
         <div>
           <div className="text-4xl md:text-5xl font-bold text-[#2c2c2c] mb-10">
