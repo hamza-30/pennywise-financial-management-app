@@ -319,7 +319,7 @@ function Analytics() {
         </div>
 
         <div
-          className={`w-full min-h-fit flex justify-between items-center flex-col md:flex-row gap-x-6 gap-y-4`}
+          className={`w-full min-h-fit flex justify-between items-center flex-col md:flex-row gap-x-6 md:gap-x-2 lg:gap-x-6 gap-y-4`}
         >
           <div
             className={`flex-1 w-full flex px-6 py-5 rounded-xl shadow-[0_0px_8px_rgba(0,0,0,0.04)]
