@@ -24,7 +24,7 @@ function Dashboard() {
   const { userProfile } = useAuthContext();
   const initialBalance = userProfile?.initialBalance || 0;
 
-  const income = transactions
+  const monthlyIncome = transactions
     .filter((trans) => trans.type == "Income")
     .filter((trans) => {
       let transDate = new Date(trans.date);
@@ -34,7 +34,7 @@ function Dashboard() {
     })
     .reduce((acc, trans) => acc + Number(trans.amount), 0);
 
-  const expense = transactions
+  const monthlyExpense = transactions
     .filter((trans) => trans.type == "Expense")
     .filter((trans) => {
       let transDate = new Date(trans.date);
@@ -44,7 +44,14 @@ function Dashboard() {
     })
     .reduce((acc, trans) => acc + Number(trans.amount), 0);
 
-  const totalBalance = initialBalance + income - expense;
+  const totalIncome = transactions
+    .filter((trans) => trans.type == "Income")
+    .reduce((acc, trans) => acc + Number(trans.amount), 0);
+  const totalExpense = transactions
+    .filter((trans) => trans.type == "Expense")
+    .reduce((acc, trans) => acc + Number(trans.amount), 0);
+
+  const totalBalance = initialBalance + totalIncome - totalExpense;
 
   const filteredTransactions = transactions
     .sort((a, b) => {
@@ -70,10 +77,10 @@ function Dashboard() {
               initial={{ opacity: 0, scale: 0.9, x: "-50%", y: -20 }}
               animate={{ opacity: 1, scale: 1, x: "-50%", y: 0 }}
               exit={{ opacity: 0, scale: 0.9, x: "-50%", y: -20 }}
-              transition={{ 
+              transition={{
                 type: "spring",
                 stiffness: 300,
-                damping: 25 
+                damping: 25,
               }}
               className={`fixed top-1/3 left-1/2 w-85 h-fit py-3 px-3 z-20 bg-white border border-gray-600 rounded-2xl`}
             >
@@ -122,8 +129,14 @@ function Dashboard() {
             description={"Total balance"}
             amount={totalBalance}
           />
-          <DashboardStatsCard description={"Total spending"} amount={expense} />
-          <DashboardStatsCard description={"Total income"} amount={income} />
+          <DashboardStatsCard
+            description={"Total spending"}
+            amount={monthlyExpense}
+          />
+          <DashboardStatsCard
+            description={"Total income"}
+            amount={monthlyIncome}
+          />
         </div>
 
         <div
