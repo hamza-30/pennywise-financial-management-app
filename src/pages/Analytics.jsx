@@ -28,8 +28,8 @@ function filterByDate(transaction, dateFilter) {
 
     case "Last Month":
       let lastMonthDate = new Date(today);
-      lastMonthDate.setMonth(today.getMonth() - 1);
       lastMonthDate.setDate(1);
+      lastMonthDate.setMonth(today.getMonth() - 1);
 
       return (
         transactionDate.getMonth() == lastMonthDate.getMonth() &&
@@ -173,7 +173,7 @@ function Analytics() {
     let dateFilteredTransactions = standardizedTransactions.filter((trans) =>
       filterByDate(trans, dateFilter),
     );
-    let previousDateFilteredTransactions = transactions.filter((trans) =>
+    let previousDateFilteredTransactions = standardizedTransactions.filter((trans) =>
       filterByPreviousDate(trans, dateFilter),
     );
 
