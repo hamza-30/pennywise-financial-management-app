@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoReceiptSharp } from "react-icons/io5";
 import TransactionRow from "../components/TransactionRow";
 import TransactionCard from "../components/TransactionCard";
 import AddTransaction from "../components/AddTransaction";
 import { useTransactions } from "../context/TransactionContext/TransactionContextProvider";
-import { checkDate } from "../utils/dateUtils";
+import { checkDate, formatDateForUI } from "../utils/dateUtils";
 import Spinner from "../components/Spinner";
 
 const formatAmount = (amt) => {
@@ -13,22 +13,24 @@ const formatAmount = (amt) => {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   });
-}
+};
 
 function Transactions() {
   const [dateFilter, setDateFilter] = useState("This month");
   const [typeFilter, setTypeFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [addTransactionOpen, setAddTransactionOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
-  const [deletingTransaction, setDeletingTransaction] = useState(null)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deletingTransaction, setDeletingTransaction] = useState(null);
   const [editingTransaction, setEditingTransaction] = useState(null);
-  const [searchTransaction, setSearchTransaction] = useState("")
+  const [searchTransaction, setSearchTransaction] = useState("");
+  const [customDate, setCustomDate] = useState("");
 
-  const {transactions, deleteTransaction, loadingTransactions} = useTransactions()
+  const { transactions, deleteTransaction, loadingTransactions } =
+    useTransactions();
 
   let categories = [
-    { name: "All"}, 
+    { name: "All" },
     { name: "Salary", type: "Income" },
     { name: "Freelance", type: "Income" },
     { name: "Investments", type: "Income" },
@@ -55,11 +57,16 @@ function Transactions() {
     { name: "Other", type: "Expense" },
   ];
 
-  if(typeFilter == "Income"){
-    categories = [{ name: "All"} , ...categories.filter((item) => item.type == "Income")]
-  }
-  else if(typeFilter == "Expense"){
-    categories = [{ name: "All"} , ...categories.filter((item) => item.type == "Expense")]
+  if (typeFilter == "Income") {
+    categories = [
+      { name: "All" },
+      ...categories.filter((item) => item.type == "Income"),
+    ];
+  } else if (typeFilter == "Expense") {
+    categories = [
+      { name: "All" },
+      ...categories.filter((item) => item.type == "Expense"),
+    ];
   }
 
   let dateStyle =
@@ -68,45 +75,55 @@ function Transactions() {
   let categoryStyle =
     categoryFilter !== "All" ? "text-black bg-[#c4f82a]" : "text-gray-700";
 
-  let filteredTransactions = transactions.filter((trans) => {
-    let matchesType = trans.type == typeFilter || typeFilter == "All";
-    let matchesCategory =
-      trans.category == categoryFilter || categoryFilter == "All";
-    const matchesDate = checkDate(trans.date, dateFilter);
+  let filteredTransactions = useMemo(() => {
+    return transactions
+      .filter((trans) => {
+        let matchesType = trans.type == typeFilter || typeFilter == "All";
+        let matchesCategory =
+          trans.category == categoryFilter || categoryFilter == "All";
 
-    return matchesType && matchesCategory && matchesDate;
-  }).filter((trans) => {
-    let desc = trans.desc.toLowerCase()
-    return desc.includes(searchTransaction.toLowerCase())
-  })
+        let matchesDate = false;
+        if (dateFilter == "Specific date") {
+          matchesDate =
+            !customDate || trans.date == formatDateForUI(customDate);
+        } else {
+          matchesDate = checkDate(trans.date, dateFilter);
+        }
 
-  filteredTransactions.sort((a, b) => {
-    let dateA = new Date(a.date).getTime();
-    let dateB = new Date(b.date).getTime();
+        return matchesType && matchesCategory && matchesDate;
+      })
+      .filter((trans) => {
+        let desc = trans.desc.toLowerCase();
+        return desc.includes(searchTransaction.toLowerCase());
+      })
+      .sort((a, b) => {
+        let dateA = new Date(a.date).getTime();
+        let dateB = new Date(b.date).getTime();
 
-    return dateB - dateA;
-  });
+        return dateB - dateA;
+      });
+  }, [transactions, typeFilter, categoryFilter, dateFilter, customDate, searchTransaction]);
 
-  function onDeleteClick(id){
-    setDeleteModalOpen(true)
-    setDeletingTransaction(id)
+  function onDeleteClick(id) {
+    setDeleteModalOpen(true);
+    setDeletingTransaction(id);
   }
 
-  function onDeleteModalCancelClick(){
-    setDeletingTransaction(null)
-    setDeleteModalOpen(!deleteModalOpen)
+  function onDeleteModalCancelClick() {
+    setDeletingTransaction(null);
+    setDeleteModalOpen(!deleteModalOpen);
   }
 
-  function confirmTransactionDeletion(){
-    if(deletingTransaction){
-      deleteTransaction(deletingTransaction)
-      setDeletingTransaction(null)
-      setDeleteModalOpen(!deleteModalOpen)
+  function confirmTransactionDeletion() {
+    if (deletingTransaction) {
+      deleteTransaction(deletingTransaction);
+      setDeletingTransaction(null);
+      setDeleteModalOpen(!deleteModalOpen);
     }
   }
 
-  if(loadingTransactions){
-    return <Spinner />
+  if (loadingTransactions) {
+    return <Spinner />;
   }
 
   return (
@@ -115,8 +132,8 @@ function Transactions() {
         className={`inset-0
         ${addTransactionOpen ? "fixed" : "hidden"}`}
         onClick={() => {
-          setAddTransactionOpen(!addTransactionOpen)
-          setEditingTransaction(null)
+          setAddTransactionOpen(!addTransactionOpen);
+          setEditingTransaction(null);
         }}
       ></div>
       <AddTransaction
@@ -126,15 +143,19 @@ function Transactions() {
         setEditingTransaction={setEditingTransaction}
       />
 
-      <div className={`inset-0 fixed
-        ${deleteModalOpen ? "fixed": "hidden"}`}></div>
+      <div
+        className={`inset-0 fixed
+        ${deleteModalOpen ? "fixed" : "hidden"}`}
+      ></div>
       <div
         className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
                 w-[90vw] md:w-[60vw] lg:w-120 pt-4 pb-3 px-4 md:px-6 backdrop-blur-xl flex flex-col bg-white rounded-2xl border border-gray-600 transition-all duration-300 ease-in-out z-50 gap-y-5
                 ${deleteModalOpen ? "absolute" : "hidden"}
                 `}
       >
-        <p className={`font-medium`}>Are you sure you want to delete this transaction?</p>
+        <p className={`font-medium`}>
+          Are you sure you want to delete this transaction?
+        </p>
 
         <div className={`ml-auto`}>
           <button
@@ -152,7 +173,6 @@ function Transactions() {
           </button>
         </div>
       </div>
-
 
       <div
         className={`flex flex-col h-full gap-y-15 md:gap-y-4 pt-8 pb-5 px-4 lg:px-8 overflow-hidden`}
@@ -191,9 +211,9 @@ function Transactions() {
               />
             </div>
 
-            <div className={`flex gap-x-2`}>
+            <div className={`flex gap-2 flex-wrap`}>
               <select
-                className={`h-8 md:h-11 max-w-22 rounded-lg text-gray-700 border border-gray-200 pl-2 hover:border-gray-400 text-sm focus:outline-[#c4f82a] ${dateStyle}`}
+                className={`h-8 md:h-11 max-w-22 rounded-lg text-gray-700 border border-gray-200 pl-1 hover:border-gray-400 text-sm focus:outline-[#c4f82a] ${dateStyle}`}
                 name="date"
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
@@ -210,7 +230,25 @@ function Transactions() {
                 <option className="bg-white" value="Last month">
                   Last month
                 </option>
+                <option className="bg-white" value="Specific date">
+                  Specific date
+                </option>
               </select>
+
+              {dateFilter == "Specific date" && (
+                <div className={`flex items-center gap-x-1`}>
+                  <span className={`md:hidden text-sm text-gray-700`}>
+                    Date:
+                  </span>
+                  <input
+                    type="date"
+                    name="date"
+                    value={customDate}
+                    onChange={(e) => setCustomDate(e.target.value)}
+                    className={`h-8 md:h-11 min-w-22 rounded-lg text-gray-700 border border-gray-200 pl-2 hover:border-gray-400 text-sm focus:outline-[#c4f82a]`}
+                  />
+                </div>
+              )}
 
               <select
                 className={`h-8 md:h-11 min-w-22  rounded-lg text-gray-700 border border-gray-200 pl-2 hover:border-gray-400 text-sm focus:outline-[#c4f82a] ${typeStyle}`}
@@ -257,7 +295,7 @@ function Transactions() {
                 <th className="px-3 py-2 pb-3 text-right">ACTION</th>
               </tr>
             </thead>
-            <tbody >
+            <tbody>
               {filteredTransactions.map((trans) => (
                 <TransactionRow
                   key={trans.id}
@@ -294,19 +332,29 @@ function Transactions() {
             ))}
           </div>
 
-          <div className={`flex-1 w-full flex flex-col items-center justify-center gap-y-2
-            ${transactions.length == 0 ? "flex" : "hidden"}`}>
-            <IoReceiptSharp className={`text-3xl md:text-5xl text-[#a0c435]`}/>
-            <p className={`font-semibold text-xl md:text-2xl text-[#484848]`}>No transactions yet</p>
+          <div
+            className={`flex-1 w-full flex flex-col items-center justify-center gap-y-2
+            ${transactions.length == 0 ? "flex" : "hidden"}`}
+          >
+            <IoReceiptSharp className={`text-3xl md:text-5xl text-[#a0c435]`} />
+            <p className={`font-semibold text-xl md:text-2xl text-[#484848]`}>
+              No transactions yet
+            </p>
           </div>
 
-          <div className={`flex-1 w-full flex flex-col items-center justify-center gap-y-2
-            ${transactions.length > 0 && filteredTransactions.length == 0 ? "flex" : "hidden"}`}>
-            <IoReceiptSharp className={`text-3xl md:text-5xl text-[#a0c435]`}/>
-            <p className={`font-semibold text-xl md:text-2xl text-[#484848]`}>No transactions found</p>
-            <p className={`text-[#595959] text-sm`}>Try refining your search or adjust filters.</p>
+          <div
+            className={`flex-1 w-full flex flex-col items-center justify-center gap-y-2
+            ${transactions.length > 0 && filteredTransactions.length == 0 ? "flex" : "hidden"}`}
+          >
+            <IoReceiptSharp className={`text-3xl md:text-5xl text-[#a0c435]`} />
+            <p className={`font-semibold text-xl md:text-2xl text-[#484848]`}>
+              No transactions found
+            </p>
+            <p className={`text-[#595959] text-sm`}>
+              Try refining your search or adjust filters.
+            </p>
           </div>
-        </div> 
+        </div>
       </div>
     </>
   );
