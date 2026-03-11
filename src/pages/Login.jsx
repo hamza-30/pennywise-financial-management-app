@@ -8,6 +8,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import Spinner from "../components/Spinner";
 import { useAuthContext } from "../context/AuthContext/AuthContextProvider";
 import { toast } from "react-hot-toast"
+import logo from "/src/assets/images/pennywiselogo.png"
 
 function Login() {
   const {
@@ -75,7 +76,7 @@ function Login() {
           to={"/login"}
         >
           <img
-            src="/src/assets/images/pennywiselogo.png"
+            src={logo}
             alt="logo"
             className="w-40"
           />
