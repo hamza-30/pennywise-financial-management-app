@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { auth } from "../firebase/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
+import logo from "/src/assets/images/pennywiselogo.png"
 
 function PasswordReset() {
   const {
@@ -35,7 +36,7 @@ function PasswordReset() {
       <div className="px-5 pt-6 md:pl-15 md:pt-10 z-20 w-full md:w-lg relative h-screen flex flex-col gap-y-[10%] md:gap-y-[13%]">
         <div>
           <img
-            src="/src/assets/images/pennywiselogo.png"
+            src={logo}
             alt="logo"
             className="w-40"
           />
