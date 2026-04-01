@@ -41,6 +41,7 @@ function Signup() {
         fullname: data.fullname,
         email: data.email,
         initialBalance: 0,
+        userId: user.uid,
       })
       
       navigate("/");
